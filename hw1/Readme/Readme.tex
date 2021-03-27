@@ -1,0 +1,154 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage{setspace}
+\usepackage{CJKutf8}
+\usepackage[utf8]{inputenc}
+\usepackage{verbatim}
+\usepackage[hidelinks]{hyperref}
+\usepackage{listings}
+\usepackage{color}
+\font\mytitle=cmr12 at 36pt
+\definecolor{light-gray}{gray}{0.95}
+
+\title{\mytitle Homework 1 \\ Readme of \\ Simple Java -- Scanner}
+\author{Chih-Hsuan Yang\\
+National Sun-Yet-San University, Taiwan \\
+Instructor: Ye-In Chang
+}
+
+\begin{document}
+\begin{CJK}{UTF8}{bsmi}
+    \begin{spacing}{1.5}
+        \maketitle
+    \end{spacing}
+    \newpage
+    \tableofcontents
+    \newpage
+
+    % ==============================
+    \section{Lex version}
+    \fbox{
+        \parbox{\textwidth}{
+            \$ lex --version \\
+            \input{|"lex --version"}
+        }
+    }
+
+    % FIXME: How to embed the shell script result in to a latex while compiling
+
+    \section{Operating System}
+    \fbox{
+        \parbox{\textwidth}{
+            \$ uname -voms
+            \verbatiminput{|"uname -voms"}
+    }
+    }
+
+    \section{Execution manual}
+    \subsection{Build}
+    \paragraph{Symbol table}\mbox{(Built, but if you want to compile by yourself)}\\
+    \fbox{
+        \parbox{\textwidth}{
+            \$ cd lib \&\& mkdir build \&\& cd build\\
+            \$ cmake ..\\
+            \$ make \\
+            \$ mv libsymbol\_table.a ..
+        }
+    }
+    \paragraph{Lexer}\mbox{}\\
+    \fbox{
+        \parbox{\textwidth}{
+            \$ flex -o lex.c demo.l\\
+            \$ gcc -c lex.c\\
+            \$ g++ lex.o lib/libsymbol\_table.a -lfl -o my\_lex.elf
+        }
+    }
+
+    \paragraph{\LaTeX}\mbox{}\\
+    \fbox{
+        \parbox{\textwidth}{
+            \$ cd Readme\\
+            \$ make
+        }
+    }
+
+    \subsection{Run}
+    \fbox{
+        \parbox{\textwidth}{
+            \$ \# Build it first\\
+            \$ ./my\_lex.elf $<$ input.java
+        }
+    }
+
+
+    \section{How to implement}
+    Regex in Lex and std::unordered\_set in C++
+
+    \section{Problems}
+    \begin{enumerate}
+        \item About the symbol table:
+              the requirement has said:\\
+              \fbox{
+                  \parbox{.9\textwidth}{
+                      create()     建立一個symbol table。\\
+                      lookup(s)    傳回字串s的index；假如s沒找到的話，就傳回-1。\\
+                      insert(s)    新增s到symbol table中，並傳回存放位置的index。\\
+                      dump()       將symbol table中所有的資料印出。
+                  }
+              }
+              \begin{enumerate}
+                  \item About the lookup(s) function:\\
+                        Why you indexing? And how you indexing?\\
+                        The symbol table is a set mathematically. A set does not have any argument is called
+                        index.\\
+                        However, the requirement asked:\\
+                        \fbox{
+                            \parbox{.83\textwidth}{
+                                lookup(s)    傳回字串s的index；假如s沒找到的話，就傳回-1。\\
+                            }
+                        }
+                        Why?\\
+                        How can I return a index of a set?\\
+                        What is the index of an element in a set?
+                  \item About the create() function:\\
+                        This is an implementation issue.\\
+                        According to the RAII pattern: In RAII, holding a resource is a
+                        class invariant, and is tied to object lifetime: resource allocation
+                        (or acquisition) is done during object creation (specifically
+                        initialization), by the constructor, while resource deallocation
+                        (release) is done during object destruction (specifically finalization),
+                        by the destructor. \\
+                        Therefore, request a function to construct an object, but no destruct
+                        is unreasonable. It would cause the memory leak issue.
+
+                  \item About the dump() function:\\
+                        Well, this is a naming issue.\\
+                        We use the word "dump" in programming, that means some error(s)
+                        happened, and we would get some information about the "crash" event.
+                        However, there is no "crash" happened while we were printing the
+                        symbol table, right?\\
+                        Hence, we shouldn't take the "dump" to be the function name.\\
+                        For clean code, we should named it as "export" or "view". Which
+                        give users a decision to handle the exported table, no matter they
+                        want to "print", "store" etc.\\
+                        Again, we shouldn't use "dump" here.
+              \end{enumerate}
+
+        \item The GNU Flex does not fully support POSIX:\\
+              I tried $[$:alpha:$]$ for $[$A-Za-z$]$ in regex. However, the flex does
+              not support.\\
+              And I tried the dollar sign '\$' for the "End-of-line". How ever the flex
+              does not support too.
+
+        \item The test file is DOS format:\\
+              Well, this is not a mistake. I just not want to precessing these formatting issue.
+              Every UNIX(-like) system are using '$\backslash$n' as newline. I don't want
+              to add a special for DOS format.
+    \end{enumerate}
+
+    \section{Outcome}
+    \lstinputlisting[showspaces=flase,
+        backgroundcolor=\color{light-gray},
+        basicstyle=\scriptsize,]{outcome}
+
+\end{CJK}
+\end{document}
