@@ -1,5 +1,5 @@
 rm -rf lib/build lex.o my_lex.elf lex.c
-flex -o lex.c demo.l
+flex -o lex.c B073040047.l
 gcc -c lex.c
 g++ lex.o lib/libsymbol_table.a -lfl -o my_lex.elf
 ./my_lex.elf < TestFile_Lab1_2021/Test1.java
@@ -54,10 +54,7 @@ Line: 12, 1st char: 15, ">" is a "operator".
 Line: 12, 1st char: 17, "10)" is a "float".
 Line: 13, 1st char: 13, "print" is a "reserved word".
 Line: 13, 1st char: 18, "(" is a "symbol".
-Line: 13, 1st char: 19, """ is a "error".
-Line: 13, 1st char: 20, "c" is a "ID".
-Line: 13, 1st char: 22, "=" is a "operator".
-Line: 13, 1st char: 24, """ is a "error".
+Line: 13, 1st char: 19, ""c = "" is a "string".
 Line: 13, 1st char: 26, "+" is a "operator".
 Line: 13, 1st char: 28, "-" is a "operator".
 Line: 13, 1st char: 29, "c" is a "ID".
@@ -71,22 +68,17 @@ Line: 15, 1st char: 20, ")" is a "symbol".
 Line: 15, 1st char: 21, ";" is a "symbol".
 Line: 16, 1st char: 9, "print" is a "reserved word".
 Line: 16, 1st char: 14, "(" is a "symbol".
-Line: 16, 1st char: 15, """ is a "error".
-Line: 16, 1st char: 16, "Hello" is a "ID".
-Line: 16, 1st char: 22, "World" is a "ID".
-Line: 16, 1st char: 27, """ is a "error".
+Line: 16, 1st char: 15, ""Hello World"" is a "string".
 Line: 16, 1st char: 28, ")" is a "symbol".
 Line: 16, 1st char: 29, ";" is a "symbol".
 Line: 18, 1st char: 5, "}" is a "symbol".
 Line: 20, 1st char: 1, "}" is a "symbol".
 The symbol table contains:
-add
-World
-Test1
-Hello
 b
 a
 c
+add
+Test1
 ./my_lex.elf < TestFile_Lab1_2021/Test2.java
 Line: 1, 1st char: 1, "// this is a comment // line */ /* with /* delimiters */ before the end
 " is a "comment".
@@ -115,8 +107,8 @@ Line: 10, 1st char: 5, "}" is a "symbol".
 Line: 11, 1st char: 1, "}" is a "symbol".
 The symbol table contains:
 d
-Test2
 i
+Test2
 ./my_lex.elf < TestFile_Lab1_2021/Test3.java
 Line: 2, 1st char: 1, "public" is a "reserved word".
 Line: 2, 1st char: 8, "class" is a "reserved word".
@@ -151,6 +143,6 @@ Line: 12, 1st char: 5, "}" is a "symbol".
 Line: 13, 1st char: 1, "}" is a "symbol".
 The symbol table contains:
 b
-Test3
 a
 A
+Test3

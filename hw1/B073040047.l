@@ -15,7 +15,7 @@ Reserved_word boolean|break|byte|case|char|catch|class|const|continue|default|do
 ID           [A-Za-z][[:alnum:]\$]*
 Integer      \-?[0-9]+
 Float        [+-]?([0-9]+(\.[0-9]+)?|\.[0-9]+)([eE][+-]?[0-9]+)?.
-String       "([^\\"]|\\\\|\\")*"
+String       \"([^\\\"]|\\\")*\"
 Whitespace   [\ \t]
 Comments     \/\*[^*]*\*+(?:[^\/*][^*]*\*+)*\/|\/\/.*\n
 Newline      \r?\n
