@@ -55,7 +55,7 @@ Instructor: Ye-In Chang
     \paragraph{Lexer}\mbox{}\\
     \fbox{
         \parbox{\textwidth}{
-            \$ flex -o lex.c demo.l\\
+            \$ flex -o lex.c B073040047.l\\
             \$ gcc -c lex.c\\
             \$ g++ lex.o lib/libsymbol\_table.a -lfl -o my\_lex.elf
         }
@@ -72,7 +72,7 @@ Instructor: Ye-In Chang
     \subsection{Run}
     \fbox{
         \parbox{\textwidth}{
-            \$ \# Build it first\\
+            \$ make \# Build it first\\
             \$ ./my\_lex.elf $<$ input.java
         }
     }
