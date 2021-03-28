@@ -76,7 +76,13 @@ Instructor: Ye-In Chang
             \$ ./my\_lex.elf $<$ input.java
         }
     }
-
+    \paragraph{Shared symbol table}\mbox{Link to your program}\\
+    \fbox{
+        \parbox{\textwidth}{
+            \$ gcc your\_lex.c -L./lib -lsymbol\_table -lfl -o your\_program.elf \\
+            \$ LD\_LIBRARY\_PATH=./lib:\$LD\_LIBRARY\_PATH
+        }
+    }
 
     \section{How to implement}
     Regex in Lex and std::unordered\_set in C++
