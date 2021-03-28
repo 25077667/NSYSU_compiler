@@ -36,7 +36,7 @@ Instructor: Ye-In Chang
     \section{Operating System}
     \fbox{
         \parbox{\textwidth}{
-            \$ \lstinputlisting[basicstyle=\scriptsize,firstline=3]{showOS.sh}
+            \$ cat /etc/os-release $\vert$ sed -En 's/PRET.*"(.*)"/$\backslash$1/p'
             \verbatiminput{|"./showOS.sh"}
         }
     }
