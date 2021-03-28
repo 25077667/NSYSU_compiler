@@ -2,14 +2,15 @@ CC= gcc
 CXX= g++
 LEX= flex
 
+SOURCE= B073040047.l
 all: clean lex
 	${CXX} lex.o lib/libsymbol_table.a -lfl -o my_lex.elf
 
 clean:
 	rm -rf lib/build lex.o my_lex.elf lex.c
 
-lex: demo.l
-	${LEX} -o lex.c demo.l
+lex: ${SOURCE}
+	${LEX} -o lex.c ${SOURCE}
 	${CC} -c lex.c
 
 test: all
