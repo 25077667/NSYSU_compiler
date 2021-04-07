@@ -6,7 +6,7 @@ extern "C"
 {
 #endif
     void create();
-    int loolup(const char *_token);
+    int lookup(const char *_token);
 
     void dump();
     void insert(const char *_token);
