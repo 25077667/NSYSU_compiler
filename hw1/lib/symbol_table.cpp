@@ -5,7 +5,7 @@
 
 namespace
 {
-    std::unordered_set<std::string_view> hash_map;
+    std::unordered_set<std::string> hash_map;
 }
 
 void dump()

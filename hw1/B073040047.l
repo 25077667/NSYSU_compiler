@@ -14,7 +14,7 @@ int newline_in_comment(const char * _str);
 Reserved_word boolean|break|byte|case|char|catch|class|const|continue|default|do|double|else|extends|false|for|if|implements|int|long|main|new|print|private|protected|public|return|short|static|string|switch|this|true|try|void|while
 ID           [A-Za-z_\$][_[:alnum:]\$]*
 Integer      \-?[0-9]+
-Float        [+-]?([0-9]+(\.[0-9]+)?|\.[0-9]+)([eE][+-]?[0-9]+)?.
+Float        [+-]?([0-9]+(\.[0-9]+)?|\.[0-9]+)([eE][+-]?[0-9]+)?[fF]?
 String       \"([^\\\"]|\\\")*\"
 Whitespace   [\ \t]
 Comments     \/\*[^*]*\*+(?:[^\/*][^*]*\*+)*\/|\/\/.*\n
@@ -89,13 +89,13 @@ Operator {Addition}|{Subtraction}|{Multiplication}|{Division}|{Module}|{Assignme
     cpos += yyleng;
 }
 
-{Float} {
-    logger(lc, cpos, "float", yytext);
+{Integer} {
+    logger(lc, cpos, "integer", yytext);
     cpos += yyleng;
 }
 
-{Integer} {
-    logger(lc, cpos, "integer", yytext);
+{Float} {
+    logger(lc, cpos, "float", yytext);
     cpos += yyleng;
 }
 

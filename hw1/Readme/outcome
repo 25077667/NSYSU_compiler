@@ -38,20 +38,23 @@ Line: 9, 1st char: 14, ";" is a "symbol".
 Line: 10, 1st char: 9, "int" is a "reserved word".
 Line: 10, 1st char: 13, "a" is a "ID".
 Line: 10, 1st char: 15, "=" is a "operator".
-Line: 10, 1st char: 17, "5;" is a "float".
+Line: 10, 1st char: 17, "5" is a "integer".
+Line: 10, 1st char: 18, ";" is a "symbol".
 Line: 11, 1st char: 9, "c" is a "ID".
 Line: 11, 1st char: 11, "=" is a "operator".
 Line: 11, 1st char: 13, "add" is a "ID".
 Line: 11, 1st char: 16, "(" is a "symbol".
 Line: 11, 1st char: 17, "a" is a "ID".
 Line: 11, 1st char: 18, "," is a "symbol".
-Line: 11, 1st char: 20, "10)" is a "float".
+Line: 11, 1st char: 20, "10" is a "integer".
+Line: 11, 1st char: 22, ")" is a "symbol".
 Line: 11, 1st char: 23, ";" is a "symbol".
 Line: 12, 1st char: 9, "if" is a "reserved word".
 Line: 12, 1st char: 12, "(" is a "symbol".
 Line: 12, 1st char: 13, "c" is a "ID".
 Line: 12, 1st char: 15, ">" is a "operator".
-Line: 12, 1st char: 17, "10)" is a "float".
+Line: 12, 1st char: 17, "10" is a "integer".
+Line: 12, 1st char: 19, ")" is a "symbol".
 Line: 13, 1st char: 13, "print" is a "reserved word".
 Line: 13, 1st char: 18, "(" is a "symbol".
 Line: 13, 1st char: 19, ""c = "" is a "string".
@@ -89,11 +92,13 @@ Line: 3, 1st char: 20, "{" is a "symbol".
 Line: 4, 1st char: 5, "int" is a "reserved word".
 Line: 4, 1st char: 9, "i" is a "ID".
 Line: 4, 1st char: 11, "=" is a "operator".
-Line: 4, 1st char: 13, "-100;" is a "float".
+Line: 4, 1st char: 13, "-100" is a "integer".
+Line: 4, 1st char: 17, ";" is a "symbol".
 Line: 5, 1st char: 5, "double" is a "reserved word".
 Line: 5, 1st char: 12, "d" is a "ID".
 Line: 5, 1st char: 14, "=" is a "operator".
-Line: 5, 1st char: 16, "12.25e+6;" is a "float".
+Line: 5, 1st char: 16, "12.25e+6" is a "float".
+Line: 5, 1st char: 24, ";" is a "symbol".
 Line: 7, 1st char: 5, "public" is a "reserved word".
 Line: 7, 1st char: 12, "static" is a "reserved word".
 Line: 7, 1st char: 19, "void" is a "reserved word".
@@ -132,13 +137,16 @@ Line: 8, 1st char: 18, ")" is a "symbol".
 Line: 8, 1st char: 20, "{" is a "symbol".
 Line: 9, 1st char: 9, "a" is a "ID".
 Line: 9, 1st char: 11, "=" is a "operator".
-Line: 9, 1st char: 13, "1;" is a "float".
+Line: 9, 1st char: 13, "1" is a "integer".
+Line: 9, 1st char: 14, ";" is a "symbol".
 Line: 10, 1st char: 9, "A" is a "ID".
 Line: 10, 1st char: 11, "=" is a "operator".
-Line: 10, 1st char: 13, "2;" is a "float".
+Line: 10, 1st char: 13, "2" is a "integer".
+Line: 10, 1st char: 14, ";" is a "symbol".
 Line: 11, 1st char: 9, "b" is a "ID".
 Line: 11, 1st char: 11, "=" is a "operator".
-Line: 11, 1st char: 13, "-1.2;" is a "float".
+Line: 11, 1st char: 13, "-1.2" is a "float".
+Line: 11, 1st char: 17, ";" is a "symbol".
 Line: 12, 1st char: 5, "}" is a "symbol".
 Line: 13, 1st char: 1, "}" is a "symbol".
 The symbol table contains:
