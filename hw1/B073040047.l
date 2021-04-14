@@ -56,6 +56,7 @@ Logical {AND}|{OR}|{NOT}
 
 Operator {Addition}|{Subtraction}|{Multiplication}|{Division}|{Module}|{Assignment}|{Relational}|{Logical}
 
+Non_ID \ [^A-Za-z_\$\*\"\ =\+\-\/\(][_[:alnum:]\$]*[^\)\;\ \r\.\n0-9]
 
 %%
 
@@ -107,6 +108,11 @@ Operator {Addition}|{Subtraction}|{Multiplication}|{Division}|{Module}|{Assignme
 {ID} {
     logger(lc, cpos, "ID", yytext);
     insert(yytext);
+    cpos += yyleng;
+}
+
+{Non_ID} {
+    logger(lc, cpos, "invalid ID", yytext + 1);
     cpos += yyleng;
 }
 
