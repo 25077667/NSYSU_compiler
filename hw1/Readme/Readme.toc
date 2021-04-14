@@ -1,0 +1,12 @@
+\contentsline {section}{\numberline {1}Lex version}{3}{section.1}%
+\contentsline {section}{\numberline {2}Operating System}{3}{section.2}%
+\contentsline {section}{\numberline {3}Execution manual}{3}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Build}{3}{subsection.3.1}%
+\contentsline {paragraph}{Symbol table}{3}{section*.2}%
+\contentsline {paragraph}{Lexer}{3}{section*.3}%
+\contentsline {paragraph}{\LaTeX }{3}{section*.4}%
+\contentsline {subsection}{\numberline {3.2}Run}{3}{subsection.3.2}%
+\contentsline {paragraph}{Shared symbol table}{3}{section*.5}%
+\contentsline {section}{\numberline {4}How to implement}{3}{section.4}%
+\contentsline {section}{\numberline {5}Problems}{4}{section.5}%
+\contentsline {section}{\numberline {6}Outcome}{6}{section.6}%
