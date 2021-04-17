@@ -50,7 +50,7 @@ Instructor: Ye-In Chang
 
     \section{Execution manual}
     \subsection{Build}
-    \paragraph{Symbol table}\mbox{(Built, but if you want to compile by yourself)}\\
+    \paragraph{Symbol table}\mbox{(Already built, but if you want to compile it by yourself)}\\
     \fbox{
         \parbox{\textwidth}{
             \$ cd lib \&\& mkdir build \&\& cd build\\
@@ -83,11 +83,12 @@ Instructor: Ye-In Chang
             \$ ./my\_lex.elf $<$ input.java
         }
     }
-    \paragraph{Shared symbol table}\mbox{Link to your program}\\
+    \paragraph{Shared symbol table}\mbox{Static linking to your program}\\
     \fbox{
         \parbox{\textwidth}{
-            \$ gcc your\_lex.c -L./lib -lsymbol\_table -lfl -o your\_program.elf \\
-            \$ LD\_LIBRARY\_PATH=./lib:\$LD\_LIBRARY\_PATH
+            \$ gcc lex.c -L./lib -lsymbol\_table -lfl -lstdc++ -static -Ofast -o my\_lex.elf \\
+            \$ ./my\_lex.elf $<$ input.java
+            % \$ LD\_LIBRARY\_PATH=./lib:\$LD\_LIBRARY\_PATH
         }
     }
 
@@ -108,7 +109,7 @@ Instructor: Ye-In Chang
               }
               \begin{enumerate}
                   \item About the lookup(s) function:\\
-                        Why you indexing? And how you indexing?\\
+                        Why you need indexing? And how you do the index?\\
                         The symbol table is a set mathematically. A set does not have any argument is called
                         index.\\
                         However, the requirement asked:\\
@@ -128,8 +129,8 @@ Instructor: Ye-In Chang
                         initialization), by the constructor, while resource deallocation
                         (release) is done during object destruction (specifically finalization),
                         by the destructor. \\
-                        Therefore, request a function to construct an object, but no destruct
-                        is unreasonable. It would cause the memory leak issue.
+                        Therefore, request a function to construct an object, but not destruct
+                        is unreasonable. It would cause the memory leaking issue.
 
                   \item About the dump() function:\\
                         Well, this is a naming issue.\\
@@ -151,7 +152,7 @@ Instructor: Ye-In Chang
               does not support too.
 
         \item The test file is DOS format:\\
-              Well, this is not a mistake. I just not want to precessing these formatting issue.
+              Well, this is not a mistake. I just do not want to precessing these formatting issues.
               Every UNIX(-like) system are using '$\backslash$n' as newline. I don't want
               to add a special for DOS format.
 
@@ -161,7 +162,7 @@ Instructor: Ye-In Chang
               And, two patterns $P_1$ and $P_2$, which can match $S$ and $A$. Given a
               string $S$ for these 2 patterns, we will get $S$ in $P_1$ rather than $A$.\\
               \begin{claim}
-                  The negation of a regex is almost-surely match all string.
+                  \underline{The negation of a regex is almost-surely match all string.}
               \end{claim}
               \begin{proof}
                   Suppose there are 2 patterns $P$ and $Q$. $\mathbb{P}$ and $\mathbb{Q}$ are the
@@ -171,16 +172,21 @@ Instructor: Ye-In Chang
                       \setminus \mathbb{P}\}$. $\mathbb{U}$ is the universal set of any regex set.\\
                   $$\neg \mathbb{P} = \{\mathbb{U} \setminus \mathbb{P}\}$$
                   $$\Rightarrow \mathbb{Q} \subseteq \neg \mathbb{P}$$
-                  $\forall S = {\neg \mathbb{P}}^* = A \mathbin\Vert B$. There are two possibilities:
+                  $\forall S = A \mathbin\Vert B = {\neg \mathbb{P}}^*$. There are two possibilities:
                   $B = \mathbb{U}^+$ or $B = \epsilon$.\\
-                  If $B = \mathbb{U}^+$, $B$ is non-empty string:\\
-                  Obviously,
+                  Consider $B = \mathbb{U}^+$:\\
+                  Obviously, call the regex matching recursively until $B = \epsilon$ go to the next possibility, otherwise:
                   \begin{equation}
                       S \not\in \mathbb{Q} \land S \in \neg\mathbb{P}
                   \end{equation}
 
-                  If $B = \epsilon$, $B$ is an empty string, there are another two possibilities:\\
-                  The state of $Q$ is terminated ($\perp$) or not terminated ($\not\perp$).\\
+                  Consider $B = \epsilon$ :\\
+                  There are another two possibilities:
+                  \begin{enumerate}
+                      \item The state of $Q$ is terminated ($\perp$)
+                      \item The state of $Q$ is not terminated ($\not\perp$).
+                  \end{enumerate}
+
                   If $Q$ is $\perp$:
                   Both $S \in \neg \mathbb{P}$ and $S \in \mathbb{Q}$ are correct.
                   \begin{equation}
@@ -196,11 +202,9 @@ Instructor: Ye-In Chang
                   $\mathbin\Vert S \mathbin\Vert = \mathbin\Vert Q \mathbin\Vert$.
                   However,
                   $$P(\mathbin\Vert S \mathbin\Vert = \mathbin\Vert Q \mathbin\Vert)=0$$
-                  \begin{center}
-                      $\Rightarrow P(S = \{\omega \in \neg \mathbb{P} | \lim_{n \to \infty} \neg \mathbb{P}_{n}(\omega)$ exists $\}) = 1$
-                  \end{center}
+                  $$\Rightarrow P(S = \{\exists \omega \in \neg \mathbb{P} \ | \lim_{n \to \infty} \neg \mathbb{P}_{n}(\omega) \}) = 1$$
 
-                  That is almost-surely convergence $S \in \neg\mathbb{P}$.
+                  By definition, that is almost-surely convergence to $S \in \neg\mathbb{P}$.
               \end{proof}
 
               To simplify in one table:\\
