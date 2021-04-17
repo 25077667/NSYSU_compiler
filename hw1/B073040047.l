@@ -58,6 +58,10 @@ Operator {Addition}|{Subtraction}|{Multiplication}|{Division}|{Module}|{Assignme
 
 Non_ID \ [^A-Za-z_\$\*\"\ =\+\-\/\(][_[:alnum:]\$]*[^\)\;\ \r\.\n0-9]
 
+Single_quote \'[^\']*\'
+Tri_double_qoute \"\"\"
+Non_string {Single_quote}|{Tri_double_qoute}
+
 %%
 
 {Whitespace} {
@@ -113,6 +117,11 @@ Non_ID \ [^A-Za-z_\$\*\"\ =\+\-\/\(][_[:alnum:]\$]*[^\)\;\ \r\.\n0-9]
 
 {Non_ID} {
     logger(lc, cpos, "invalid ID", yytext + 1);
+    cpos += yyleng;
+}
+
+{Non_string} {
+    logger(lc, cpos, "invalid string", yytext);
     cpos += yyleng;
 }
 
