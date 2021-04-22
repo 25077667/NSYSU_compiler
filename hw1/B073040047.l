@@ -109,6 +109,11 @@ Non_string {Single_quote}|{Tri_double_qoute}
     cpos += yyleng;
 }
 
+{Non_string} {
+    logger(lc, cpos, "invalid string", yytext);
+    cpos += yyleng;
+}
+
 {ID} {
     logger(lc, cpos, "ID", yytext);
     insert(yytext);
@@ -117,11 +122,6 @@ Non_string {Single_quote}|{Tri_double_qoute}
 
 {Non_ID} {
     logger(lc, cpos, "invalid ID", yytext + 1);
-    cpos += yyleng;
-}
-
-{Non_string} {
-    logger(lc, cpos, "invalid string", yytext);
     cpos += yyleng;
 }
 
