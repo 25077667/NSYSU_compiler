@@ -1,8 +1,0 @@
-{
-    "files.associations": {
-        "list": "cpp",
-        "*.tcc": "cpp",
-        "string": "cpp",
-        "string_view": "cpp"
-    }
-}
