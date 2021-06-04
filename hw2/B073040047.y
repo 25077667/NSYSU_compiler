@@ -9,23 +9,20 @@ void yyerror(const char *s);
 %token AND BOOLEAN CHAR CLASS ELSE EQ FINAL FLOAT FOR GE ID IF INT LE MAIN MM NE NEW INT_L FLOAT_L OR PP PRINT RETURN STATIC STR VOID WHILE
 
 %%
-classes : 
-| classes class;
+classes: | classes class;
 
-
-class : 
-CLASS ID '{' { push(); } fields methods { pop();} '}'
-| CLASS ID '{' { push(); } fields { pop();} '}'
-| CLASS ID '{' { push(); } methods { pop();} '}'
+class: CLASS ID '{' { push(); } fields methods { pop();} '}'
 | CLASS ID '{' '}'
 ;
 
-fields: declarations;
-methods: type ID '(' id_list_star ')' compound;
+fields: | fields declarations;
+methods: 
+| methods type ID '(' id_list_star ')' compound
+| methods type MAIN '(' id_list_star ')' compound;
 
 id_list_star:|id_list;
 
-compound:  '{' { push(); } { pop();} '}'
+compound:  '{' '}'
 |  '{' { push(); } declarations { pop();} '}'
 |  '{' { push(); } statement { pop();} '}'
 |  '{' { push(); } declarations statement { pop();} '}'
