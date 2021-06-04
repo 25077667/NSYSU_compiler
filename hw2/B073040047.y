@@ -11,9 +11,7 @@ void yyerror(const char *s);
 %%
 classes: | classes class;
 
-class: CLASS generic_id '{'{push();} fields methods '}'{pop();}
-| CLASS generic_id '{' '}'
-;
+class: CLASS generic_id '{'{push();} fields methods '}'{pop();};
 
 fields: declaration_star;
 methods: 
@@ -45,7 +43,7 @@ id_list_init: generic_id '=' const_expr
 | id_list_init ',' generic_id '=' const_expr 
 ;
 
-generic_id:  ID | generic_id'[' INT ']' | generic_id'.'ID;
+generic_id:  ID | generic_id'[' INT_L ']' | generic_id'.'ID;
 
 type: INT 
 | FLOAT
