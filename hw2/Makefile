@@ -8,7 +8,7 @@ all: clean yacc lex
 	${CC} B073040047.tab.o lex.o lib/libsymbol_table.a -lfl -ly -lstdc++ -static -o my_yacc.elf
 
 clean:
-	rm -rf lib/build B073040047.tab.o lex.o my_yacc.elf lex.c B073040047.tab.c B073040047.tab.h B073040047.out
+	rm -rf lib/build B073040047.tab.o lex.o my_yacc.elf lex.c B073040047.tab.c B073040047.tab.h B073040047.output
 
 lex: ${LEX_RULE}
 	${LEX} -o lex.c ${LEX_RULE}
