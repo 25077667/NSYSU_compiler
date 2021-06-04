@@ -1,0 +1,2798 @@
+Terminals unused in grammar
+
+    AND
+    EQ
+    GE
+    LE
+    MAIN
+    NE
+    OR
+    STR
+
+
+Rules useless in parser due to conflicts
+
+    6 $@3: %empty
+
+    9 $@5: %empty
+
+   26 $@13: %empty
+
+
+State 6 conflicts: 12 reduce/reduce
+State 44 conflicts: 2 shift/reduce
+State 65 conflicts: 1 shift/reduce
+State 66 conflicts: 11 shift/reduce
+State 67 conflicts: 11 shift/reduce
+State 71 conflicts: 1 shift/reduce
+State 89 conflicts: 7 reduce/reduce
+State 111 conflicts: 2 shift/reduce, 1 reduce/reduce
+State 129 conflicts: 2 shift/reduce
+State 134 conflicts: 1 shift/reduce
+State 191 conflicts: 8 shift/reduce
+State 192 conflicts: 8 shift/reduce
+
+
+Grammar
+
+    0 $accept: classes $end
+
+    1 classes: %empty
+    2        | classes class
+
+    3 $@1: %empty
+
+    4 $@2: %empty
+
+    5 class: CLASS ID '{' $@1 fields methods $@2 '}'
+
+    6 $@3: %empty
+
+    7 $@4: %empty
+
+    8 class: CLASS ID '{' $@3 fields $@4 '}'
+
+    9 $@5: %empty
+
+   10 $@6: %empty
+
+   11 class: CLASS ID '{' $@5 methods $@6 '}'
+   12      | CLASS ID '{' '}'
+
+   13 fields: declarations
+
+   14 methods: type ID '(' id_list_star ')' compound
+
+   15 id_list_star: %empty
+   16             | id_list
+
+   17 $@7: %empty
+
+   18 $@8: %empty
+
+   19 compound: '{' $@7 $@8 '}'
+
+   20 $@9: %empty
+
+   21 $@10: %empty
+
+   22 compound: '{' $@9 declarations $@10 '}'
+
+   23 $@11: %empty
+
+   24 $@12: %empty
+
+   25 compound: '{' $@11 statement $@12 '}'
+
+   26 $@13: %empty
+
+   27 $@14: %empty
+
+   28 compound: '{' $@13 declarations statement $@14 '}'
+
+   29 declarations: specifier type id_list ';'
+   30             | specifier type id_list_init ';'
+   31             | FINAL type id_list_init ';'
+   32             | specifier arr_type arr_init ';'
+
+   33 specifier: %empty
+   34          | STATIC
+
+   35 id_list: ID
+   36        | id_list ',' ID
+   37        | id_list_init
+   38        | id_list ',' id_list_init
+
+   39 id_list_init: ID '=' const_expr
+   40             | id_list_init ',' ID '=' const_expr
+
+   41 type: INT
+   42     | FLOAT
+   43     | CHAR
+   44     | BOOLEAN
+   45     | VOID
+
+   46 const_expr: INT_L
+   47           | FLOAT_L
+   48           | INT_L Infixop INT_L
+   49           | INT_L Infixop FLOAT_L
+   50           | FLOAT_L Infixop INT_L
+   51           | FLOAT_L Infixop FLOAT_L
+
+   52 Infixop: '+'
+   53        | '-'
+   54        | '*'
+   55        | '/'
+   56        | '%'
+   57        | '>'
+   58        | '<'
+   59        | '&'
+   60        | '|'
+   61        | '<' '='
+   62        | '>' '='
+   63        | '=' '='
+   64        | '!' '='
+   65        | '&' '&'
+   66        | '|' '|'
+
+   67 arr_type: INT '[' ']'
+   68         | FLOAT '[' ']'
+   69         | CHAR '[' ']'
+   70         | BOOLEAN '[' ']'
+
+   71 arr_init: '=' NEW type '[' INT_L ']'
+
+   72 statement: compound
+   73          | simple ';'
+   74          | conditional ';'
+   75          | loop ';'
+   76          | return ';'
+   77          | call ';'
+   78          | ';'
+
+   79 simple: name '=' expr ';'
+   80       | PRINT '(' expr ')' ';'
+   81       | name PP ';'
+   82       | name MM ';'
+   83       | expr ';'
+   84       | ';'
+
+   85 name: ID
+   86     | name '.' ID
+
+   87 expr: term
+   88     | expr '+' term
+   89     | expr '-' term
+
+   90 term: factor
+   91     | factor '*' factor
+   92     | factor '/' factor
+
+   93 factor: ID
+   94       | const_expr
+   95       | '(' expr ')'
+   96       | PrefixOp ID
+   97       | ID PostfixOp
+   98       | call
+
+   99 PrefixOp: PP
+  100         | MM
+  101         | '+'
+  102         | '-'
+
+  103 PostfixOp: PP
+  104          | MM
+
+  105 conditional: IF '(' bool_expr ')' simple ELSE simple
+  106            | IF '(' bool_expr ')' compound ELSE simple
+  107            | IF '(' bool_expr ')' compound ELSE compound
+  108            | IF '(' bool_expr ')' simple ELSE compound
+
+  109 bool_expr: expr Infixop expr
+
+  110 loop: WHILE '(' bool_expr ')' simple
+  111     | WHILE '(' bool_expr ')' compound
+  112     | FOR '(' ForInitOpt ';' bool_expr ';' ForUpdateOpt ')' simple
+  113     | FOR '(' ForInitOpt ';' bool_expr ';' ForUpdateOpt ')' compound
+
+  114 ForInitOpt: %empty
+  115           | id_list_init
+  116           | INT id_list_init
+
+  117 ForUpdateOpt: %empty
+  118             | ID PP
+  119             | ID MM
+
+  120 return: RETURN expr ';'
+
+  121 call: name '(' expr_list ')' ';'
+
+  122 expr_list: expr
+  123          | expr ',' expr_list
+
+
+Terminals, with rules where they appear
+
+    $end (0) 0
+    '!' (33) 64
+    '%' (37) 56
+    '&' (38) 59 65
+    '(' (40) 14 80 95 105 106 107 108 110 111 112 113 121
+    ')' (41) 14 80 95 105 106 107 108 110 111 112 113 121
+    '*' (42) 54 91
+    '+' (43) 52 88 101
+    ',' (44) 36 38 40 123
+    '-' (45) 53 89 102
+    '.' (46) 86
+    '/' (47) 55 92
+    ';' (59) 29 30 31 32 73 74 75 76 77 78 79 80 81 82 83 84 112 113 120 121
+    '<' (60) 58 61
+    '=' (61) 39 40 61 62 63 64 71 79
+    '>' (62) 57 62
+    '[' (91) 67 68 69 70 71
+    ']' (93) 67 68 69 70 71
+    '{' (123) 5 8 11 12 19 22 25 28
+    '|' (124) 60 66
+    '}' (125) 5 8 11 12 19 22 25 28
+    error (256)
+    AND (258)
+    BOOLEAN (259) 44 70
+    CHAR (260) 43 69
+    CLASS (261) 5 8 11 12
+    ELSE (262) 105 106 107 108
+    EQ (263)
+    FINAL (264) 31
+    FLOAT (265) 42 68
+    FOR (266) 112 113
+    GE (267)
+    ID (268) 5 8 11 12 14 35 36 39 40 85 86 93 96 97 118 119
+    IF (269) 105 106 107 108
+    INT (270) 41 67 116
+    LE (271)
+    MAIN (272)
+    MM (273) 82 100 104 119
+    NE (274)
+    NEW (275) 71
+    INT_L (276) 46 48 49 50 71
+    FLOAT_L (277) 47 49 50 51
+    OR (278)
+    PP (279) 81 99 103 118
+    PRINT (280) 80
+    RETURN (281) 120
+    STATIC (282) 34
+    STR (283)
+    VOID (284) 45
+    WHILE (285) 110 111
+
+
+Nonterminals, with rules where they appear
+
+    $accept (51)
+        on left: 0
+    classes (52)
+        on left: 1 2
+        on right: 0 2
+    class (53)
+        on left: 5 8 11 12
+        on right: 2
+    $@1 (54)
+        on left: 3
+        on right: 5
+    $@2 (55)
+        on left: 4
+        on right: 5
+    $@3 (56)
+        on left: 6
+        on right: 8
+    $@4 (57)
+        on left: 7
+        on right: 8
+    $@5 (58)
+        on left: 9
+        on right: 11
+    $@6 (59)
+        on left: 10
+        on right: 11
+    fields (60)
+        on left: 13
+        on right: 5 8
+    methods (61)
+        on left: 14
+        on right: 5 11
+    id_list_star (62)
+        on left: 15 16
+        on right: 14
+    compound (63)
+        on left: 19 22 25 28
+        on right: 14 72 106 107 108 111 113
+    $@7 (64)
+        on left: 17
+        on right: 19
+    $@8 (65)
+        on left: 18
+        on right: 19
+    $@9 (66)
+        on left: 20
+        on right: 22
+    $@10 (67)
+        on left: 21
+        on right: 22
+    $@11 (68)
+        on left: 23
+        on right: 25
+    $@12 (69)
+        on left: 24
+        on right: 25
+    $@13 (70)
+        on left: 26
+        on right: 28
+    $@14 (71)
+        on left: 27
+        on right: 28
+    declarations (72)
+        on left: 29 30 31 32
+        on right: 13 22 28
+    specifier (73)
+        on left: 33 34
+        on right: 29 30 32
+    id_list (74)
+        on left: 35 36 37 38
+        on right: 16 29 36 38
+    id_list_init (75)
+        on left: 39 40
+        on right: 30 31 37 38 40 115 116
+    type (76)
+        on left: 41 42 43 44 45
+        on right: 14 29 30 31 71
+    const_expr (77)
+        on left: 46 47 48 49 50 51
+        on right: 39 40 94
+    Infixop (78)
+        on left: 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66
+        on right: 48 49 50 51 109
+    arr_type (79)
+        on left: 67 68 69 70
+        on right: 32
+    arr_init (80)
+        on left: 71
+        on right: 32
+    statement (81)
+        on left: 72 73 74 75 76 77 78
+        on right: 25 28
+    simple (82)
+        on left: 79 80 81 82 83 84
+        on right: 73 105 106 108 110 112
+    name (83)
+        on left: 85 86
+        on right: 79 81 82 86 121
+    expr (84)
+        on left: 87 88 89
+        on right: 79 80 83 88 89 95 109 120 122 123
+    term (85)
+        on left: 90 91 92
+        on right: 87 88 89
+    factor (86)
+        on left: 93 94 95 96 97 98
+        on right: 90 91 92
+    PrefixOp (87)
+        on left: 99 100 101 102
+        on right: 96
+    PostfixOp (88)
+        on left: 103 104
+        on right: 97
+    conditional (89)
+        on left: 105 106 107 108
+        on right: 74
+    bool_expr (90)
+        on left: 109
+        on right: 105 106 107 108 110 111 112 113
+    loop (91)
+        on left: 110 111 112 113
+        on right: 75
+    ForInitOpt (92)
+        on left: 114 115 116
+        on right: 112 113
+    ForUpdateOpt (93)
+        on left: 117 118 119
+        on right: 112 113
+    return (94)
+        on left: 120
+        on right: 76
+    call (95)
+        on left: 121
+        on right: 77 98
+    expr_list (96)
+        on left: 122 123
+        on right: 121 123
+
+
+State 0
+
+    0 $accept: . classes $end
+
+    $default  reduce using rule 1 (classes)
+
+    classes  go to state 1
+
+
+State 1
+
+    0 $accept: classes . $end
+    2 classes: classes . class
+
+    $end   shift, and go to state 2
+    CLASS  shift, and go to state 3
+
+    class  go to state 4
+
+
+State 2
+
+    0 $accept: classes $end .
+
+    $default  accept
+
+
+State 3
+
+    5 class: CLASS . ID '{' $@1 fields methods $@2 '}'
+    8      | CLASS . ID '{' $@3 fields $@4 '}'
+   11      | CLASS . ID '{' $@5 methods $@6 '}'
+   12      | CLASS . ID '{' '}'
+
+    ID  shift, and go to state 5
+
+
+State 4
+
+    2 classes: classes class .
+
+    $default  reduce using rule 2 (classes)
+
+
+State 5
+
+    5 class: CLASS ID . '{' $@1 fields methods $@2 '}'
+    8      | CLASS ID . '{' $@3 fields $@4 '}'
+   11      | CLASS ID . '{' $@5 methods $@6 '}'
+   12      | CLASS ID . '{' '}'
+
+    '{'  shift, and go to state 6
+
+
+State 6
+
+    5 class: CLASS ID '{' . $@1 fields methods $@2 '}'
+    8      | CLASS ID '{' . $@3 fields $@4 '}'
+   11      | CLASS ID '{' . $@5 methods $@6 '}'
+   12      | CLASS ID '{' . '}'
+
+    '}'  shift, and go to state 7
+
+    BOOLEAN   reduce using rule 3 ($@1)
+    BOOLEAN   [reduce using rule 6 ($@3)]
+    BOOLEAN   [reduce using rule 9 ($@5)]
+    CHAR      reduce using rule 3 ($@1)
+    CHAR      [reduce using rule 6 ($@3)]
+    CHAR      [reduce using rule 9 ($@5)]
+    FINAL     reduce using rule 3 ($@1)
+    FINAL     [reduce using rule 6 ($@3)]
+    FLOAT     reduce using rule 3 ($@1)
+    FLOAT     [reduce using rule 6 ($@3)]
+    FLOAT     [reduce using rule 9 ($@5)]
+    INT       reduce using rule 3 ($@1)
+    INT       [reduce using rule 6 ($@3)]
+    INT       [reduce using rule 9 ($@5)]
+    STATIC    reduce using rule 3 ($@1)
+    STATIC    [reduce using rule 6 ($@3)]
+    VOID      reduce using rule 3 ($@1)
+    VOID      [reduce using rule 6 ($@3)]
+    VOID      [reduce using rule 9 ($@5)]
+    $default  reduce using rule 3 ($@1)
+
+    $@1  go to state 8
+    $@3  go to state 9
+    $@5  go to state 10
+
+
+State 7
+
+   12 class: CLASS ID '{' '}' .
+
+    $default  reduce using rule 12 (class)
+
+
+State 8
+
+    5 class: CLASS ID '{' $@1 . fields methods $@2 '}'
+
+    FINAL   shift, and go to state 11
+    STATIC  shift, and go to state 12
+
+    $default  reduce using rule 33 (specifier)
+
+    fields        go to state 13
+    declarations  go to state 14
+    specifier     go to state 15
+
+
+State 9
+
+    8 class: CLASS ID '{' $@3 . fields $@4 '}'
+
+    FINAL   shift, and go to state 11
+    STATIC  shift, and go to state 12
+
+    $default  reduce using rule 33 (specifier)
+
+    fields        go to state 16
+    declarations  go to state 14
+    specifier     go to state 15
+
+
+State 10
+
+   11 class: CLASS ID '{' $@5 . methods $@6 '}'
+
+    BOOLEAN  shift, and go to state 17
+    CHAR     shift, and go to state 18
+    FLOAT    shift, and go to state 19
+    INT      shift, and go to state 20
+    VOID     shift, and go to state 21
+
+    methods  go to state 22
+    type     go to state 23
+
+
+State 11
+
+   31 declarations: FINAL . type id_list_init ';'
+
+    BOOLEAN  shift, and go to state 17
+    CHAR     shift, and go to state 18
+    FLOAT    shift, and go to state 19
+    INT      shift, and go to state 20
+    VOID     shift, and go to state 21
+
+    type  go to state 24
+
+
+State 12
+
+   34 specifier: STATIC .
+
+    $default  reduce using rule 34 (specifier)
+
+
+State 13
+
+    5 class: CLASS ID '{' $@1 fields . methods $@2 '}'
+
+    BOOLEAN  shift, and go to state 17
+    CHAR     shift, and go to state 18
+    FLOAT    shift, and go to state 19
+    INT      shift, and go to state 20
+    VOID     shift, and go to state 21
+
+    methods  go to state 25
+    type     go to state 23
+
+
+State 14
+
+   13 fields: declarations .
+
+    $default  reduce using rule 13 (fields)
+
+
+State 15
+
+   29 declarations: specifier . type id_list ';'
+   30             | specifier . type id_list_init ';'
+   32             | specifier . arr_type arr_init ';'
+
+    BOOLEAN  shift, and go to state 26
+    CHAR     shift, and go to state 27
+    FLOAT    shift, and go to state 28
+    INT      shift, and go to state 29
+    VOID     shift, and go to state 21
+
+    type      go to state 30
+    arr_type  go to state 31
+
+
+State 16
+
+    8 class: CLASS ID '{' $@3 fields . $@4 '}'
+
+    $default  reduce using rule 7 ($@4)
+
+    $@4  go to state 32
+
+
+State 17
+
+   44 type: BOOLEAN .
+
+    $default  reduce using rule 44 (type)
+
+
+State 18
+
+   43 type: CHAR .
+
+    $default  reduce using rule 43 (type)
+
+
+State 19
+
+   42 type: FLOAT .
+
+    $default  reduce using rule 42 (type)
+
+
+State 20
+
+   41 type: INT .
+
+    $default  reduce using rule 41 (type)
+
+
+State 21
+
+   45 type: VOID .
+
+    $default  reduce using rule 45 (type)
+
+
+State 22
+
+   11 class: CLASS ID '{' $@5 methods . $@6 '}'
+
+    $default  reduce using rule 10 ($@6)
+
+    $@6  go to state 33
+
+
+State 23
+
+   14 methods: type . ID '(' id_list_star ')' compound
+
+    ID  shift, and go to state 34
+
+
+State 24
+
+   31 declarations: FINAL type . id_list_init ';'
+
+    ID  shift, and go to state 35
+
+    id_list_init  go to state 36
+
+
+State 25
+
+    5 class: CLASS ID '{' $@1 fields methods . $@2 '}'
+
+    $default  reduce using rule 4 ($@2)
+
+    $@2  go to state 37
+
+
+State 26
+
+   44 type: BOOLEAN .
+   70 arr_type: BOOLEAN . '[' ']'
+
+    '['  shift, and go to state 38
+
+    $default  reduce using rule 44 (type)
+
+
+State 27
+
+   43 type: CHAR .
+   69 arr_type: CHAR . '[' ']'
+
+    '['  shift, and go to state 39
+
+    $default  reduce using rule 43 (type)
+
+
+State 28
+
+   42 type: FLOAT .
+   68 arr_type: FLOAT . '[' ']'
+
+    '['  shift, and go to state 40
+
+    $default  reduce using rule 42 (type)
+
+
+State 29
+
+   41 type: INT .
+   67 arr_type: INT . '[' ']'
+
+    '['  shift, and go to state 41
+
+    $default  reduce using rule 41 (type)
+
+
+State 30
+
+   29 declarations: specifier type . id_list ';'
+   30             | specifier type . id_list_init ';'
+
+    ID  shift, and go to state 42
+
+    id_list       go to state 43
+    id_list_init  go to state 44
+
+
+State 31
+
+   32 declarations: specifier arr_type . arr_init ';'
+
+    '='  shift, and go to state 45
+
+    arr_init  go to state 46
+
+
+State 32
+
+    8 class: CLASS ID '{' $@3 fields $@4 . '}'
+
+    '}'  shift, and go to state 47
+
+
+State 33
+
+   11 class: CLASS ID '{' $@5 methods $@6 . '}'
+
+    '}'  shift, and go to state 48
+
+
+State 34
+
+   14 methods: type ID . '(' id_list_star ')' compound
+
+    '('  shift, and go to state 49
+
+
+State 35
+
+   39 id_list_init: ID . '=' const_expr
+
+    '='  shift, and go to state 50
+
+
+State 36
+
+   31 declarations: FINAL type id_list_init . ';'
+   40 id_list_init: id_list_init . ',' ID '=' const_expr
+
+    ';'  shift, and go to state 51
+    ','  shift, and go to state 52
+
+
+State 37
+
+    5 class: CLASS ID '{' $@1 fields methods $@2 . '}'
+
+    '}'  shift, and go to state 53
+
+
+State 38
+
+   70 arr_type: BOOLEAN '[' . ']'
+
+    ']'  shift, and go to state 54
+
+
+State 39
+
+   69 arr_type: CHAR '[' . ']'
+
+    ']'  shift, and go to state 55
+
+
+State 40
+
+   68 arr_type: FLOAT '[' . ']'
+
+    ']'  shift, and go to state 56
+
+
+State 41
+
+   67 arr_type: INT '[' . ']'
+
+    ']'  shift, and go to state 57
+
+
+State 42
+
+   35 id_list: ID .
+   39 id_list_init: ID . '=' const_expr
+
+    '='  shift, and go to state 50
+
+    $default  reduce using rule 35 (id_list)
+
+
+State 43
+
+   29 declarations: specifier type id_list . ';'
+   36 id_list: id_list . ',' ID
+   38        | id_list . ',' id_list_init
+
+    ';'  shift, and go to state 58
+    ','  shift, and go to state 59
+
+
+State 44
+
+   30 declarations: specifier type id_list_init . ';'
+   37 id_list: id_list_init .
+   40 id_list_init: id_list_init . ',' ID '=' const_expr
+
+    ';'  shift, and go to state 60
+    ','  shift, and go to state 52
+
+    ';'  [reduce using rule 37 (id_list)]
+    ','  [reduce using rule 37 (id_list)]
+
+
+State 45
+
+   71 arr_init: '=' . NEW type '[' INT_L ']'
+
+    NEW  shift, and go to state 61
+
+
+State 46
+
+   32 declarations: specifier arr_type arr_init . ';'
+
+    ';'  shift, and go to state 62
+
+
+State 47
+
+    8 class: CLASS ID '{' $@3 fields $@4 '}' .
+
+    $default  reduce using rule 8 (class)
+
+
+State 48
+
+   11 class: CLASS ID '{' $@5 methods $@6 '}' .
+
+    $default  reduce using rule 11 (class)
+
+
+State 49
+
+   14 methods: type ID '(' . id_list_star ')' compound
+
+    ID  shift, and go to state 42
+
+    $default  reduce using rule 15 (id_list_star)
+
+    id_list_star  go to state 63
+    id_list       go to state 64
+    id_list_init  go to state 65
+
+
+State 50
+
+   39 id_list_init: ID '=' . const_expr
+
+    INT_L    shift, and go to state 66
+    FLOAT_L  shift, and go to state 67
+
+    const_expr  go to state 68
+
+
+State 51
+
+   31 declarations: FINAL type id_list_init ';' .
+
+    $default  reduce using rule 31 (declarations)
+
+
+State 52
+
+   40 id_list_init: id_list_init ',' . ID '=' const_expr
+
+    ID  shift, and go to state 69
+
+
+State 53
+
+    5 class: CLASS ID '{' $@1 fields methods $@2 '}' .
+
+    $default  reduce using rule 5 (class)
+
+
+State 54
+
+   70 arr_type: BOOLEAN '[' ']' .
+
+    $default  reduce using rule 70 (arr_type)
+
+
+State 55
+
+   69 arr_type: CHAR '[' ']' .
+
+    $default  reduce using rule 69 (arr_type)
+
+
+State 56
+
+   68 arr_type: FLOAT '[' ']' .
+
+    $default  reduce using rule 68 (arr_type)
+
+
+State 57
+
+   67 arr_type: INT '[' ']' .
+
+    $default  reduce using rule 67 (arr_type)
+
+
+State 58
+
+   29 declarations: specifier type id_list ';' .
+
+    $default  reduce using rule 29 (declarations)
+
+
+State 59
+
+   36 id_list: id_list ',' . ID
+   38        | id_list ',' . id_list_init
+
+    ID  shift, and go to state 70
+
+    id_list_init  go to state 71
+
+
+State 60
+
+   30 declarations: specifier type id_list_init ';' .
+
+    $default  reduce using rule 30 (declarations)
+
+
+State 61
+
+   71 arr_init: '=' NEW . type '[' INT_L ']'
+
+    BOOLEAN  shift, and go to state 17
+    CHAR     shift, and go to state 18
+    FLOAT    shift, and go to state 19
+    INT      shift, and go to state 20
+    VOID     shift, and go to state 21
+
+    type  go to state 72
+
+
+State 62
+
+   32 declarations: specifier arr_type arr_init ';' .
+
+    $default  reduce using rule 32 (declarations)
+
+
+State 63
+
+   14 methods: type ID '(' id_list_star . ')' compound
+
+    ')'  shift, and go to state 73
+
+
+State 64
+
+   16 id_list_star: id_list .
+   36 id_list: id_list . ',' ID
+   38        | id_list . ',' id_list_init
+
+    ','  shift, and go to state 59
+
+    $default  reduce using rule 16 (id_list_star)
+
+
+State 65
+
+   37 id_list: id_list_init .
+   40 id_list_init: id_list_init . ',' ID '=' const_expr
+
+    ','  shift, and go to state 52
+
+    ','       [reduce using rule 37 (id_list)]
+    $default  reduce using rule 37 (id_list)
+
+
+State 66
+
+   46 const_expr: INT_L .
+   48           | INT_L . Infixop INT_L
+   49           | INT_L . Infixop FLOAT_L
+
+    '='  shift, and go to state 74
+    '+'  shift, and go to state 75
+    '-'  shift, and go to state 76
+    '*'  shift, and go to state 77
+    '/'  shift, and go to state 78
+    '%'  shift, and go to state 79
+    '>'  shift, and go to state 80
+    '<'  shift, and go to state 81
+    '&'  shift, and go to state 82
+    '|'  shift, and go to state 83
+    '!'  shift, and go to state 84
+
+    '='       [reduce using rule 46 (const_expr)]
+    '+'       [reduce using rule 46 (const_expr)]
+    '-'       [reduce using rule 46 (const_expr)]
+    '*'       [reduce using rule 46 (const_expr)]
+    '/'       [reduce using rule 46 (const_expr)]
+    '%'       [reduce using rule 46 (const_expr)]
+    '>'       [reduce using rule 46 (const_expr)]
+    '<'       [reduce using rule 46 (const_expr)]
+    '&'       [reduce using rule 46 (const_expr)]
+    '|'       [reduce using rule 46 (const_expr)]
+    '!'       [reduce using rule 46 (const_expr)]
+    $default  reduce using rule 46 (const_expr)
+
+    Infixop  go to state 85
+
+
+State 67
+
+   47 const_expr: FLOAT_L .
+   50           | FLOAT_L . Infixop INT_L
+   51           | FLOAT_L . Infixop FLOAT_L
+
+    '='  shift, and go to state 74
+    '+'  shift, and go to state 75
+    '-'  shift, and go to state 76
+    '*'  shift, and go to state 77
+    '/'  shift, and go to state 78
+    '%'  shift, and go to state 79
+    '>'  shift, and go to state 80
+    '<'  shift, and go to state 81
+    '&'  shift, and go to state 82
+    '|'  shift, and go to state 83
+    '!'  shift, and go to state 84
+
+    '='       [reduce using rule 47 (const_expr)]
+    '+'       [reduce using rule 47 (const_expr)]
+    '-'       [reduce using rule 47 (const_expr)]
+    '*'       [reduce using rule 47 (const_expr)]
+    '/'       [reduce using rule 47 (const_expr)]
+    '%'       [reduce using rule 47 (const_expr)]
+    '>'       [reduce using rule 47 (const_expr)]
+    '<'       [reduce using rule 47 (const_expr)]
+    '&'       [reduce using rule 47 (const_expr)]
+    '|'       [reduce using rule 47 (const_expr)]
+    '!'       [reduce using rule 47 (const_expr)]
+    $default  reduce using rule 47 (const_expr)
+
+    Infixop  go to state 86
+
+
+State 68
+
+   39 id_list_init: ID '=' const_expr .
+
+    $default  reduce using rule 39 (id_list_init)
+
+
+State 69
+
+   40 id_list_init: id_list_init ',' ID . '=' const_expr
+
+    '='  shift, and go to state 87
+
+
+State 70
+
+   36 id_list: id_list ',' ID .
+   39 id_list_init: ID . '=' const_expr
+
+    '='  shift, and go to state 50
+
+    $default  reduce using rule 36 (id_list)
+
+
+State 71
+
+   38 id_list: id_list ',' id_list_init .
+   40 id_list_init: id_list_init . ',' ID '=' const_expr
+
+    ','  shift, and go to state 52
+
+    ','       [reduce using rule 38 (id_list)]
+    $default  reduce using rule 38 (id_list)
+
+
+State 72
+
+   71 arr_init: '=' NEW type . '[' INT_L ']'
+
+    '['  shift, and go to state 88
+
+
+State 73
+
+   14 methods: type ID '(' id_list_star ')' . compound
+
+    '{'  shift, and go to state 89
+
+    compound  go to state 90
+
+
+State 74
+
+   63 Infixop: '=' . '='
+
+    '='  shift, and go to state 91
+
+
+State 75
+
+   52 Infixop: '+' .
+
+    $default  reduce using rule 52 (Infixop)
+
+
+State 76
+
+   53 Infixop: '-' .
+
+    $default  reduce using rule 53 (Infixop)
+
+
+State 77
+
+   54 Infixop: '*' .
+
+    $default  reduce using rule 54 (Infixop)
+
+
+State 78
+
+   55 Infixop: '/' .
+
+    $default  reduce using rule 55 (Infixop)
+
+
+State 79
+
+   56 Infixop: '%' .
+
+    $default  reduce using rule 56 (Infixop)
+
+
+State 80
+
+   57 Infixop: '>' .
+   62        | '>' . '='
+
+    '='  shift, and go to state 92
+
+    $default  reduce using rule 57 (Infixop)
+
+
+State 81
+
+   58 Infixop: '<' .
+   61        | '<' . '='
+
+    '='  shift, and go to state 93
+
+    $default  reduce using rule 58 (Infixop)
+
+
+State 82
+
+   59 Infixop: '&' .
+   65        | '&' . '&'
+
+    '&'  shift, and go to state 94
+
+    $default  reduce using rule 59 (Infixop)
+
+
+State 83
+
+   60 Infixop: '|' .
+   66        | '|' . '|'
+
+    '|'  shift, and go to state 95
+
+    $default  reduce using rule 60 (Infixop)
+
+
+State 84
+
+   64 Infixop: '!' . '='
+
+    '='  shift, and go to state 96
+
+
+State 85
+
+   48 const_expr: INT_L Infixop . INT_L
+   49           | INT_L Infixop . FLOAT_L
+
+    INT_L    shift, and go to state 97
+    FLOAT_L  shift, and go to state 98
+
+
+State 86
+
+   50 const_expr: FLOAT_L Infixop . INT_L
+   51           | FLOAT_L Infixop . FLOAT_L
+
+    INT_L    shift, and go to state 99
+    FLOAT_L  shift, and go to state 100
+
+
+State 87
+
+   40 id_list_init: id_list_init ',' ID '=' . const_expr
+
+    INT_L    shift, and go to state 66
+    FLOAT_L  shift, and go to state 67
+
+    const_expr  go to state 101
+
+
+State 88
+
+   71 arr_init: '=' NEW type '[' . INT_L ']'
+
+    INT_L  shift, and go to state 102
+
+
+State 89
+
+   19 compound: '{' . $@7 $@8 '}'
+   22         | '{' . $@9 declarations $@10 '}'
+   25         | '{' . $@11 statement $@12 '}'
+   28         | '{' . $@13 declarations statement $@14 '}'
+
+    BOOLEAN   reduce using rule 20 ($@9)
+    BOOLEAN   [reduce using rule 26 ($@13)]
+    CHAR      reduce using rule 20 ($@9)
+    CHAR      [reduce using rule 26 ($@13)]
+    FINAL     reduce using rule 20 ($@9)
+    FINAL     [reduce using rule 26 ($@13)]
+    FLOAT     reduce using rule 20 ($@9)
+    FLOAT     [reduce using rule 26 ($@13)]
+    INT       reduce using rule 20 ($@9)
+    INT       [reduce using rule 26 ($@13)]
+    STATIC    reduce using rule 20 ($@9)
+    STATIC    [reduce using rule 26 ($@13)]
+    VOID      reduce using rule 20 ($@9)
+    VOID      [reduce using rule 26 ($@13)]
+    '}'       reduce using rule 17 ($@7)
+    $default  reduce using rule 23 ($@11)
+
+    $@7   go to state 103
+    $@9   go to state 104
+    $@11  go to state 105
+    $@13  go to state 106
+
+
+State 90
+
+   14 methods: type ID '(' id_list_star ')' compound .
+
+    $default  reduce using rule 14 (methods)
+
+
+State 91
+
+   63 Infixop: '=' '=' .
+
+    $default  reduce using rule 63 (Infixop)
+
+
+State 92
+
+   62 Infixop: '>' '=' .
+
+    $default  reduce using rule 62 (Infixop)
+
+
+State 93
+
+   61 Infixop: '<' '=' .
+
+    $default  reduce using rule 61 (Infixop)
+
+
+State 94
+
+   65 Infixop: '&' '&' .
+
+    $default  reduce using rule 65 (Infixop)
+
+
+State 95
+
+   66 Infixop: '|' '|' .
+
+    $default  reduce using rule 66 (Infixop)
+
+
+State 96
+
+   64 Infixop: '!' '=' .
+
+    $default  reduce using rule 64 (Infixop)
+
+
+State 97
+
+   48 const_expr: INT_L Infixop INT_L .
+
+    $default  reduce using rule 48 (const_expr)
+
+
+State 98
+
+   49 const_expr: INT_L Infixop FLOAT_L .
+
+    $default  reduce using rule 49 (const_expr)
+
+
+State 99
+
+   50 const_expr: FLOAT_L Infixop INT_L .
+
+    $default  reduce using rule 50 (const_expr)
+
+
+State 100
+
+   51 const_expr: FLOAT_L Infixop FLOAT_L .
+
+    $default  reduce using rule 51 (const_expr)
+
+
+State 101
+
+   40 id_list_init: id_list_init ',' ID '=' const_expr .
+
+    $default  reduce using rule 40 (id_list_init)
+
+
+State 102
+
+   71 arr_init: '=' NEW type '[' INT_L . ']'
+
+    ']'  shift, and go to state 107
+
+
+State 103
+
+   19 compound: '{' $@7 . $@8 '}'
+
+    $default  reduce using rule 18 ($@8)
+
+    $@8  go to state 108
+
+
+State 104
+
+   22 compound: '{' $@9 . declarations $@10 '}'
+
+    FINAL   shift, and go to state 11
+    STATIC  shift, and go to state 12
+
+    $default  reduce using rule 33 (specifier)
+
+    declarations  go to state 109
+    specifier     go to state 15
+
+
+State 105
+
+   25 compound: '{' $@11 . statement $@12 '}'
+
+    FOR      shift, and go to state 110
+    ID       shift, and go to state 111
+    IF       shift, and go to state 112
+    MM       shift, and go to state 113
+    INT_L    shift, and go to state 66
+    FLOAT_L  shift, and go to state 67
+    PP       shift, and go to state 114
+    PRINT    shift, and go to state 115
+    RETURN   shift, and go to state 116
+    WHILE    shift, and go to state 117
+    '{'      shift, and go to state 89
+    '('      shift, and go to state 118
+    ';'      shift, and go to state 119
+    '+'      shift, and go to state 120
+    '-'      shift, and go to state 121
+
+    compound     go to state 122
+    const_expr   go to state 123
+    statement    go to state 124
+    simple       go to state 125
+    name         go to state 126
+    expr         go to state 127
+    term         go to state 128
+    factor       go to state 129
+    PrefixOp     go to state 130
+    conditional  go to state 131
+    loop         go to state 132
+    return       go to state 133
+    call         go to state 134
+
+
+State 106
+
+   28 compound: '{' $@13 . declarations statement $@14 '}'
+
+    FINAL   shift, and go to state 11
+    STATIC  shift, and go to state 12
+
+    $default  reduce using rule 33 (specifier)
+
+    declarations  go to state 135
+    specifier     go to state 15
+
+
+State 107
+
+   71 arr_init: '=' NEW type '[' INT_L ']' .
+
+    $default  reduce using rule 71 (arr_init)
+
+
+State 108
+
+   19 compound: '{' $@7 $@8 . '}'
+
+    '}'  shift, and go to state 136
+
+
+State 109
+
+   22 compound: '{' $@9 declarations . $@10 '}'
+
+    $default  reduce using rule 21 ($@10)
+
+    $@10  go to state 137
+
+
+State 110
+
+  112 loop: FOR . '(' ForInitOpt ';' bool_expr ';' ForUpdateOpt ')' simple
+  113     | FOR . '(' ForInitOpt ';' bool_expr ';' ForUpdateOpt ')' compound
+
+    '('  shift, and go to state 138
+
+
+State 111
+
+   85 name: ID .
+   93 factor: ID .
+   97       | ID . PostfixOp
+
+    MM  shift, and go to state 139
+    PP  shift, and go to state 140
+
+    MM        [reduce using rule 85 (name)]
+    PP        [reduce using rule 85 (name)]
+    '('       reduce using rule 85 (name)
+    '='       reduce using rule 85 (name)
+    '='       [reduce using rule 93 (factor)]
+    '.'       reduce using rule 85 (name)
+    $default  reduce using rule 93 (factor)
+
+    PostfixOp  go to state 141
+
+
+State 112
+
+  105 conditional: IF . '(' bool_expr ')' simple ELSE simple
+  106            | IF . '(' bool_expr ')' compound ELSE simple
+  107            | IF . '(' bool_expr ')' compound ELSE compound
+  108            | IF . '(' bool_expr ')' simple ELSE compound
+
+    '('  shift, and go to state 142
+
+
+State 113
+
+  100 PrefixOp: MM .
+
+    $default  reduce using rule 100 (PrefixOp)
+
+
+State 114
+
+   99 PrefixOp: PP .
+
+    $default  reduce using rule 99 (PrefixOp)
+
+
+State 115
+
+   80 simple: PRINT . '(' expr ')' ';'
+
+    '('  shift, and go to state 143
+
+
+State 116
+
+  120 return: RETURN . expr ';'
+
+    ID       shift, and go to state 111
+    MM       shift, and go to state 113
+    INT_L    shift, and go to state 66
+    FLOAT_L  shift, and go to state 67
+    PP       shift, and go to state 114
+    '('      shift, and go to state 118
+    '+'      shift, and go to state 120
+    '-'      shift, and go to state 121
+
+    const_expr  go to state 123
+    name        go to state 144
+    expr        go to state 145
+    term        go to state 128
+    factor      go to state 129
+    PrefixOp    go to state 130
+    call        go to state 146
+
+
+State 117
+
+  110 loop: WHILE . '(' bool_expr ')' simple
+  111     | WHILE . '(' bool_expr ')' compound
+
+    '('  shift, and go to state 147
+
+
+State 118
+
+   95 factor: '(' . expr ')'
+
+    ID       shift, and go to state 111
+    MM       shift, and go to state 113
+    INT_L    shift, and go to state 66
+    FLOAT_L  shift, and go to state 67
+    PP       shift, and go to state 114
+    '('      shift, and go to state 118
+    '+'      shift, and go to state 120
+    '-'      shift, and go to state 121
+
+    const_expr  go to state 123
+    name        go to state 144
+    expr        go to state 148
+    term        go to state 128
+    factor      go to state 129
+    PrefixOp    go to state 130
+    call        go to state 146
+
+
+State 119
+
+   78 statement: ';' .
+   84 simple: ';' .
+
+    ';'       reduce using rule 84 (simple)
+    $default  reduce using rule 78 (statement)
+
+
+State 120
+
+  101 PrefixOp: '+' .
+
+    $default  reduce using rule 101 (PrefixOp)
+
+
+State 121
+
+  102 PrefixOp: '-' .
+
+    $default  reduce using rule 102 (PrefixOp)
+
+
+State 122
+
+   72 statement: compound .
+
+    $default  reduce using rule 72 (statement)
+
+
+State 123
+
+   94 factor: const_expr .
+
+    $default  reduce using rule 94 (factor)
+
+
+State 124
+
+   25 compound: '{' $@11 statement . $@12 '}'
+
+    $default  reduce using rule 24 ($@12)
+
+    $@12  go to state 149
+
+
+State 125
+
+   73 statement: simple . ';'
+
+    ';'  shift, and go to state 150
+
+
+State 126
+
+   79 simple: name . '=' expr ';'
+   81       | name . PP ';'
+   82       | name . MM ';'
+   86 name: name . '.' ID
+  121 call: name . '(' expr_list ')' ';'
+
+    MM   shift, and go to state 151
+    PP   shift, and go to state 152
+    '('  shift, and go to state 153
+    '='  shift, and go to state 154
+    '.'  shift, and go to state 155
+
+
+State 127
+
+   83 simple: expr . ';'
+   88 expr: expr . '+' term
+   89     | expr . '-' term
+
+    ';'  shift, and go to state 156
+    '+'  shift, and go to state 157
+    '-'  shift, and go to state 158
+
+
+State 128
+
+   87 expr: term .
+
+    $default  reduce using rule 87 (expr)
+
+
+State 129
+
+   90 term: factor .
+   91     | factor . '*' factor
+   92     | factor . '/' factor
+
+    '*'  shift, and go to state 159
+    '/'  shift, and go to state 160
+
+    '*'       [reduce using rule 90 (term)]
+    '/'       [reduce using rule 90 (term)]
+    $default  reduce using rule 90 (term)
+
+
+State 130
+
+   96 factor: PrefixOp . ID
+
+    ID  shift, and go to state 161
+
+
+State 131
+
+   74 statement: conditional . ';'
+
+    ';'  shift, and go to state 162
+
+
+State 132
+
+   75 statement: loop . ';'
+
+    ';'  shift, and go to state 163
+
+
+State 133
+
+   76 statement: return . ';'
+
+    ';'  shift, and go to state 164
+
+
+State 134
+
+   77 statement: call . ';'
+   98 factor: call .
+
+    ';'  shift, and go to state 165
+
+    ';'       [reduce using rule 98 (factor)]
+    $default  reduce using rule 98 (factor)
+
+
+State 135
+
+   28 compound: '{' $@13 declarations . statement $@14 '}'
+
+    FOR      shift, and go to state 110
+    ID       shift, and go to state 111
+    IF       shift, and go to state 112
+    MM       shift, and go to state 113
+    INT_L    shift, and go to state 66
+    FLOAT_L  shift, and go to state 67
+    PP       shift, and go to state 114
+    PRINT    shift, and go to state 115
+    RETURN   shift, and go to state 116
+    WHILE    shift, and go to state 117
+    '{'      shift, and go to state 89
+    '('      shift, and go to state 118
+    ';'      shift, and go to state 119
+    '+'      shift, and go to state 120
+    '-'      shift, and go to state 121
+
+    compound     go to state 122
+    const_expr   go to state 123
+    statement    go to state 166
+    simple       go to state 125
+    name         go to state 126
+    expr         go to state 127
+    term         go to state 128
+    factor       go to state 129
+    PrefixOp     go to state 130
+    conditional  go to state 131
+    loop         go to state 132
+    return       go to state 133
+    call         go to state 134
+
+
+State 136
+
+   19 compound: '{' $@7 $@8 '}' .
+
+    $default  reduce using rule 19 (compound)
+
+
+State 137
+
+   22 compound: '{' $@9 declarations $@10 . '}'
+
+    '}'  shift, and go to state 167
+
+
+State 138
+
+  112 loop: FOR '(' . ForInitOpt ';' bool_expr ';' ForUpdateOpt ')' simple
+  113     | FOR '(' . ForInitOpt ';' bool_expr ';' ForUpdateOpt ')' compound
+
+    ID   shift, and go to state 35
+    INT  shift, and go to state 168
+
+    $default  reduce using rule 114 (ForInitOpt)
+
+    id_list_init  go to state 169
+    ForInitOpt    go to state 170
+
+
+State 139
+
+  104 PostfixOp: MM .
+
+    $default  reduce using rule 104 (PostfixOp)
+
+
+State 140
+
+  103 PostfixOp: PP .
+
+    $default  reduce using rule 103 (PostfixOp)
+
+
+State 141
+
+   97 factor: ID PostfixOp .
+
+    $default  reduce using rule 97 (factor)
+
+
+State 142
+
+  105 conditional: IF '(' . bool_expr ')' simple ELSE simple
+  106            | IF '(' . bool_expr ')' compound ELSE simple
+  107            | IF '(' . bool_expr ')' compound ELSE compound
+  108            | IF '(' . bool_expr ')' simple ELSE compound
+
+    ID       shift, and go to state 111
+    MM       shift, and go to state 113
+    INT_L    shift, and go to state 66
+    FLOAT_L  shift, and go to state 67
+    PP       shift, and go to state 114
+    '('      shift, and go to state 118
+    '+'      shift, and go to state 120
+    '-'      shift, and go to state 121
+
+    const_expr  go to state 123
+    name        go to state 144
+    expr        go to state 171
+    term        go to state 128
+    factor      go to state 129
+    PrefixOp    go to state 130
+    bool_expr   go to state 172
+    call        go to state 146
+
+
+State 143
+
+   80 simple: PRINT '(' . expr ')' ';'
+
+    ID       shift, and go to state 111
+    MM       shift, and go to state 113
+    INT_L    shift, and go to state 66
+    FLOAT_L  shift, and go to state 67
+    PP       shift, and go to state 114
+    '('      shift, and go to state 118
+    '+'      shift, and go to state 120
+    '-'      shift, and go to state 121
+
+    const_expr  go to state 123
+    name        go to state 144
+    expr        go to state 173
+    term        go to state 128
+    factor      go to state 129
+    PrefixOp    go to state 130
+    call        go to state 146
+
+
+State 144
+
+   86 name: name . '.' ID
+  121 call: name . '(' expr_list ')' ';'
+
+    '('  shift, and go to state 153
+    '.'  shift, and go to state 155
+
+
+State 145
+
+   88 expr: expr . '+' term
+   89     | expr . '-' term
+  120 return: RETURN expr . ';'
+
+    ';'  shift, and go to state 174
+    '+'  shift, and go to state 157
+    '-'  shift, and go to state 158
+
+
+State 146
+
+   98 factor: call .
+
+    $default  reduce using rule 98 (factor)
+
+
+State 147
+
+  110 loop: WHILE '(' . bool_expr ')' simple
+  111     | WHILE '(' . bool_expr ')' compound
+
+    ID       shift, and go to state 111
+    MM       shift, and go to state 113
+    INT_L    shift, and go to state 66
+    FLOAT_L  shift, and go to state 67
+    PP       shift, and go to state 114
+    '('      shift, and go to state 118
+    '+'      shift, and go to state 120
+    '-'      shift, and go to state 121
+
+    const_expr  go to state 123
+    name        go to state 144
+    expr        go to state 171
+    term        go to state 128
+    factor      go to state 129
+    PrefixOp    go to state 130
+    bool_expr   go to state 175
+    call        go to state 146
+
+
+State 148
+
+   88 expr: expr . '+' term
+   89     | expr . '-' term
+   95 factor: '(' expr . ')'
+
+    ')'  shift, and go to state 176
+    '+'  shift, and go to state 157
+    '-'  shift, and go to state 158
+
+
+State 149
+
+   25 compound: '{' $@11 statement $@12 . '}'
+
+    '}'  shift, and go to state 177
+
+
+State 150
+
+   73 statement: simple ';' .
+
+    $default  reduce using rule 73 (statement)
+
+
+State 151
+
+   82 simple: name MM . ';'
+
+    ';'  shift, and go to state 178
+
+
+State 152
+
+   81 simple: name PP . ';'
+
+    ';'  shift, and go to state 179
+
+
+State 153
+
+  121 call: name '(' . expr_list ')' ';'
+
+    ID       shift, and go to state 111
+    MM       shift, and go to state 113
+    INT_L    shift, and go to state 66
+    FLOAT_L  shift, and go to state 67
+    PP       shift, and go to state 114
+    '('      shift, and go to state 118
+    '+'      shift, and go to state 120
+    '-'      shift, and go to state 121
+
+    const_expr  go to state 123
+    name        go to state 144
+    expr        go to state 180
+    term        go to state 128
+    factor      go to state 129
+    PrefixOp    go to state 130
+    call        go to state 146
+    expr_list   go to state 181
+
+
+State 154
+
+   79 simple: name '=' . expr ';'
+
+    ID       shift, and go to state 111
+    MM       shift, and go to state 113
+    INT_L    shift, and go to state 66
+    FLOAT_L  shift, and go to state 67
+    PP       shift, and go to state 114
+    '('      shift, and go to state 118
+    '+'      shift, and go to state 120
+    '-'      shift, and go to state 121
+
+    const_expr  go to state 123
+    name        go to state 144
+    expr        go to state 182
+    term        go to state 128
+    factor      go to state 129
+    PrefixOp    go to state 130
+    call        go to state 146
+
+
+State 155
+
+   86 name: name '.' . ID
+
+    ID  shift, and go to state 183
+
+
+State 156
+
+   83 simple: expr ';' .
+
+    $default  reduce using rule 83 (simple)
+
+
+State 157
+
+   88 expr: expr '+' . term
+
+    ID       shift, and go to state 111
+    MM       shift, and go to state 113
+    INT_L    shift, and go to state 66
+    FLOAT_L  shift, and go to state 67
+    PP       shift, and go to state 114
+    '('      shift, and go to state 118
+    '+'      shift, and go to state 120
+    '-'      shift, and go to state 121
+
+    const_expr  go to state 123
+    name        go to state 144
+    term        go to state 184
+    factor      go to state 129
+    PrefixOp    go to state 130
+    call        go to state 146
+
+
+State 158
+
+   89 expr: expr '-' . term
+
+    ID       shift, and go to state 111
+    MM       shift, and go to state 113
+    INT_L    shift, and go to state 66
+    FLOAT_L  shift, and go to state 67
+    PP       shift, and go to state 114
+    '('      shift, and go to state 118
+    '+'      shift, and go to state 120
+    '-'      shift, and go to state 121
+
+    const_expr  go to state 123
+    name        go to state 144
+    term        go to state 185
+    factor      go to state 129
+    PrefixOp    go to state 130
+    call        go to state 146
+
+
+State 159
+
+   91 term: factor '*' . factor
+
+    ID       shift, and go to state 111
+    MM       shift, and go to state 113
+    INT_L    shift, and go to state 66
+    FLOAT_L  shift, and go to state 67
+    PP       shift, and go to state 114
+    '('      shift, and go to state 118
+    '+'      shift, and go to state 120
+    '-'      shift, and go to state 121
+
+    const_expr  go to state 123
+    name        go to state 144
+    factor      go to state 186
+    PrefixOp    go to state 130
+    call        go to state 146
+
+
+State 160
+
+   92 term: factor '/' . factor
+
+    ID       shift, and go to state 111
+    MM       shift, and go to state 113
+    INT_L    shift, and go to state 66
+    FLOAT_L  shift, and go to state 67
+    PP       shift, and go to state 114
+    '('      shift, and go to state 118
+    '+'      shift, and go to state 120
+    '-'      shift, and go to state 121
+
+    const_expr  go to state 123
+    name        go to state 144
+    factor      go to state 187
+    PrefixOp    go to state 130
+    call        go to state 146
+
+
+State 161
+
+   96 factor: PrefixOp ID .
+
+    $default  reduce using rule 96 (factor)
+
+
+State 162
+
+   74 statement: conditional ';' .
+
+    $default  reduce using rule 74 (statement)
+
+
+State 163
+
+   75 statement: loop ';' .
+
+    $default  reduce using rule 75 (statement)
+
+
+State 164
+
+   76 statement: return ';' .
+
+    $default  reduce using rule 76 (statement)
+
+
+State 165
+
+   77 statement: call ';' .
+
+    $default  reduce using rule 77 (statement)
+
+
+State 166
+
+   28 compound: '{' $@13 declarations statement . $@14 '}'
+
+    $default  reduce using rule 27 ($@14)
+
+    $@14  go to state 188
+
+
+State 167
+
+   22 compound: '{' $@9 declarations $@10 '}' .
+
+    $default  reduce using rule 22 (compound)
+
+
+State 168
+
+  116 ForInitOpt: INT . id_list_init
+
+    ID  shift, and go to state 35
+
+    id_list_init  go to state 189
+
+
+State 169
+
+   40 id_list_init: id_list_init . ',' ID '=' const_expr
+  115 ForInitOpt: id_list_init .
+
+    ','  shift, and go to state 52
+
+    $default  reduce using rule 115 (ForInitOpt)
+
+
+State 170
+
+  112 loop: FOR '(' ForInitOpt . ';' bool_expr ';' ForUpdateOpt ')' simple
+  113     | FOR '(' ForInitOpt . ';' bool_expr ';' ForUpdateOpt ')' compound
+
+    ';'  shift, and go to state 190
+
+
+State 171
+
+   88 expr: expr . '+' term
+   89     | expr . '-' term
+  109 bool_expr: expr . Infixop expr
+
+    '='  shift, and go to state 74
+    '+'  shift, and go to state 191
+    '-'  shift, and go to state 192
+    '*'  shift, and go to state 77
+    '/'  shift, and go to state 78
+    '%'  shift, and go to state 79
+    '>'  shift, and go to state 80
+    '<'  shift, and go to state 81
+    '&'  shift, and go to state 82
+    '|'  shift, and go to state 83
+    '!'  shift, and go to state 84
+
+    Infixop  go to state 193
+
+
+State 172
+
+  105 conditional: IF '(' bool_expr . ')' simple ELSE simple
+  106            | IF '(' bool_expr . ')' compound ELSE simple
+  107            | IF '(' bool_expr . ')' compound ELSE compound
+  108            | IF '(' bool_expr . ')' simple ELSE compound
+
+    ')'  shift, and go to state 194
+
+
+State 173
+
+   80 simple: PRINT '(' expr . ')' ';'
+   88 expr: expr . '+' term
+   89     | expr . '-' term
+
+    ')'  shift, and go to state 195
+    '+'  shift, and go to state 157
+    '-'  shift, and go to state 158
+
+
+State 174
+
+  120 return: RETURN expr ';' .
+
+    $default  reduce using rule 120 (return)
+
+
+State 175
+
+  110 loop: WHILE '(' bool_expr . ')' simple
+  111     | WHILE '(' bool_expr . ')' compound
+
+    ')'  shift, and go to state 196
+
+
+State 176
+
+   95 factor: '(' expr ')' .
+
+    $default  reduce using rule 95 (factor)
+
+
+State 177
+
+   25 compound: '{' $@11 statement $@12 '}' .
+
+    $default  reduce using rule 25 (compound)
+
+
+State 178
+
+   82 simple: name MM ';' .
+
+    $default  reduce using rule 82 (simple)
+
+
+State 179
+
+   81 simple: name PP ';' .
+
+    $default  reduce using rule 81 (simple)
+
+
+State 180
+
+   88 expr: expr . '+' term
+   89     | expr . '-' term
+  122 expr_list: expr .
+  123          | expr . ',' expr_list
+
+    ','  shift, and go to state 197
+    '+'  shift, and go to state 157
+    '-'  shift, and go to state 158
+
+    $default  reduce using rule 122 (expr_list)
+
+
+State 181
+
+  121 call: name '(' expr_list . ')' ';'
+
+    ')'  shift, and go to state 198
+
+
+State 182
+
+   79 simple: name '=' expr . ';'
+   88 expr: expr . '+' term
+   89     | expr . '-' term
+
+    ';'  shift, and go to state 199
+    '+'  shift, and go to state 157
+    '-'  shift, and go to state 158
+
+
+State 183
+
+   86 name: name '.' ID .
+
+    $default  reduce using rule 86 (name)
+
+
+State 184
+
+   88 expr: expr '+' term .
+
+    $default  reduce using rule 88 (expr)
+
+
+State 185
+
+   89 expr: expr '-' term .
+
+    $default  reduce using rule 89 (expr)
+
+
+State 186
+
+   91 term: factor '*' factor .
+
+    $default  reduce using rule 91 (term)
+
+
+State 187
+
+   92 term: factor '/' factor .
+
+    $default  reduce using rule 92 (term)
+
+
+State 188
+
+   28 compound: '{' $@13 declarations statement $@14 . '}'
+
+    '}'  shift, and go to state 200
+
+
+State 189
+
+   40 id_list_init: id_list_init . ',' ID '=' const_expr
+  116 ForInitOpt: INT id_list_init .
+
+    ','  shift, and go to state 52
+
+    $default  reduce using rule 116 (ForInitOpt)
+
+
+State 190
+
+  112 loop: FOR '(' ForInitOpt ';' . bool_expr ';' ForUpdateOpt ')' simple
+  113     | FOR '(' ForInitOpt ';' . bool_expr ';' ForUpdateOpt ')' compound
+
+    ID       shift, and go to state 111
+    MM       shift, and go to state 113
+    INT_L    shift, and go to state 66
+    FLOAT_L  shift, and go to state 67
+    PP       shift, and go to state 114
+    '('      shift, and go to state 118
+    '+'      shift, and go to state 120
+    '-'      shift, and go to state 121
+
+    const_expr  go to state 123
+    name        go to state 144
+    expr        go to state 171
+    term        go to state 128
+    factor      go to state 129
+    PrefixOp    go to state 130
+    bool_expr   go to state 201
+    call        go to state 146
+
+
+State 191
+
+   52 Infixop: '+' .
+   88 expr: expr '+' . term
+
+    ID       shift, and go to state 111
+    MM       shift, and go to state 113
+    INT_L    shift, and go to state 66
+    FLOAT_L  shift, and go to state 67
+    PP       shift, and go to state 114
+    '('      shift, and go to state 118
+    '+'      shift, and go to state 120
+    '-'      shift, and go to state 121
+
+    ID       [reduce using rule 52 (Infixop)]
+    MM       [reduce using rule 52 (Infixop)]
+    INT_L    [reduce using rule 52 (Infixop)]
+    FLOAT_L  [reduce using rule 52 (Infixop)]
+    PP       [reduce using rule 52 (Infixop)]
+    '('      [reduce using rule 52 (Infixop)]
+    '+'      [reduce using rule 52 (Infixop)]
+    '-'      [reduce using rule 52 (Infixop)]
+
+    const_expr  go to state 123
+    name        go to state 144
+    term        go to state 184
+    factor      go to state 129
+    PrefixOp    go to state 130
+    call        go to state 146
+
+
+State 192
+
+   53 Infixop: '-' .
+   89 expr: expr '-' . term
+
+    ID       shift, and go to state 111
+    MM       shift, and go to state 113
+    INT_L    shift, and go to state 66
+    FLOAT_L  shift, and go to state 67
+    PP       shift, and go to state 114
+    '('      shift, and go to state 118
+    '+'      shift, and go to state 120
+    '-'      shift, and go to state 121
+
+    ID       [reduce using rule 53 (Infixop)]
+    MM       [reduce using rule 53 (Infixop)]
+    INT_L    [reduce using rule 53 (Infixop)]
+    FLOAT_L  [reduce using rule 53 (Infixop)]
+    PP       [reduce using rule 53 (Infixop)]
+    '('      [reduce using rule 53 (Infixop)]
+    '+'      [reduce using rule 53 (Infixop)]
+    '-'      [reduce using rule 53 (Infixop)]
+
+    const_expr  go to state 123
+    name        go to state 144
+    term        go to state 185
+    factor      go to state 129
+    PrefixOp    go to state 130
+    call        go to state 146
+
+
+State 193
+
+  109 bool_expr: expr Infixop . expr
+
+    ID       shift, and go to state 111
+    MM       shift, and go to state 113
+    INT_L    shift, and go to state 66
+    FLOAT_L  shift, and go to state 67
+    PP       shift, and go to state 114
+    '('      shift, and go to state 118
+    '+'      shift, and go to state 120
+    '-'      shift, and go to state 121
+
+    const_expr  go to state 123
+    name        go to state 144
+    expr        go to state 202
+    term        go to state 128
+    factor      go to state 129
+    PrefixOp    go to state 130
+    call        go to state 146
+
+
+State 194
+
+  105 conditional: IF '(' bool_expr ')' . simple ELSE simple
+  106            | IF '(' bool_expr ')' . compound ELSE simple
+  107            | IF '(' bool_expr ')' . compound ELSE compound
+  108            | IF '(' bool_expr ')' . simple ELSE compound
+
+    ID       shift, and go to state 111
+    MM       shift, and go to state 113
+    INT_L    shift, and go to state 66
+    FLOAT_L  shift, and go to state 67
+    PP       shift, and go to state 114
+    PRINT    shift, and go to state 115
+    '{'      shift, and go to state 89
+    '('      shift, and go to state 118
+    ';'      shift, and go to state 203
+    '+'      shift, and go to state 120
+    '-'      shift, and go to state 121
+
+    compound    go to state 204
+    const_expr  go to state 123
+    simple      go to state 205
+    name        go to state 126
+    expr        go to state 127
+    term        go to state 128
+    factor      go to state 129
+    PrefixOp    go to state 130
+    call        go to state 146
+
+
+State 195
+
+   80 simple: PRINT '(' expr ')' . ';'
+
+    ';'  shift, and go to state 206
+
+
+State 196
+
+  110 loop: WHILE '(' bool_expr ')' . simple
+  111     | WHILE '(' bool_expr ')' . compound
+
+    ID       shift, and go to state 111
+    MM       shift, and go to state 113
+    INT_L    shift, and go to state 66
+    FLOAT_L  shift, and go to state 67
+    PP       shift, and go to state 114
+    PRINT    shift, and go to state 115
+    '{'      shift, and go to state 89
+    '('      shift, and go to state 118
+    ';'      shift, and go to state 203
+    '+'      shift, and go to state 120
+    '-'      shift, and go to state 121
+
+    compound    go to state 207
+    const_expr  go to state 123
+    simple      go to state 208
+    name        go to state 126
+    expr        go to state 127
+    term        go to state 128
+    factor      go to state 129
+    PrefixOp    go to state 130
+    call        go to state 146
+
+
+State 197
+
+  123 expr_list: expr ',' . expr_list
+
+    ID       shift, and go to state 111
+    MM       shift, and go to state 113
+    INT_L    shift, and go to state 66
+    FLOAT_L  shift, and go to state 67
+    PP       shift, and go to state 114
+    '('      shift, and go to state 118
+    '+'      shift, and go to state 120
+    '-'      shift, and go to state 121
+
+    const_expr  go to state 123
+    name        go to state 144
+    expr        go to state 180
+    term        go to state 128
+    factor      go to state 129
+    PrefixOp    go to state 130
+    call        go to state 146
+    expr_list   go to state 209
+
+
+State 198
+
+  121 call: name '(' expr_list ')' . ';'
+
+    ';'  shift, and go to state 210
+
+
+State 199
+
+   79 simple: name '=' expr ';' .
+
+    $default  reduce using rule 79 (simple)
+
+
+State 200
+
+   28 compound: '{' $@13 declarations statement $@14 '}' .
+
+    $default  reduce using rule 28 (compound)
+
+
+State 201
+
+  112 loop: FOR '(' ForInitOpt ';' bool_expr . ';' ForUpdateOpt ')' simple
+  113     | FOR '(' ForInitOpt ';' bool_expr . ';' ForUpdateOpt ')' compound
+
+    ';'  shift, and go to state 211
+
+
+State 202
+
+   88 expr: expr . '+' term
+   89     | expr . '-' term
+  109 bool_expr: expr Infixop expr .
+
+    '+'  shift, and go to state 157
+    '-'  shift, and go to state 158
+
+    $default  reduce using rule 109 (bool_expr)
+
+
+State 203
+
+   84 simple: ';' .
+
+    $default  reduce using rule 84 (simple)
+
+
+State 204
+
+  106 conditional: IF '(' bool_expr ')' compound . ELSE simple
+  107            | IF '(' bool_expr ')' compound . ELSE compound
+
+    ELSE  shift, and go to state 212
+
+
+State 205
+
+  105 conditional: IF '(' bool_expr ')' simple . ELSE simple
+  108            | IF '(' bool_expr ')' simple . ELSE compound
+
+    ELSE  shift, and go to state 213
+
+
+State 206
+
+   80 simple: PRINT '(' expr ')' ';' .
+
+    $default  reduce using rule 80 (simple)
+
+
+State 207
+
+  111 loop: WHILE '(' bool_expr ')' compound .
+
+    $default  reduce using rule 111 (loop)
+
+
+State 208
+
+  110 loop: WHILE '(' bool_expr ')' simple .
+
+    $default  reduce using rule 110 (loop)
+
+
+State 209
+
+  123 expr_list: expr ',' expr_list .
+
+    $default  reduce using rule 123 (expr_list)
+
+
+State 210
+
+  121 call: name '(' expr_list ')' ';' .
+
+    $default  reduce using rule 121 (call)
+
+
+State 211
+
+  112 loop: FOR '(' ForInitOpt ';' bool_expr ';' . ForUpdateOpt ')' simple
+  113     | FOR '(' ForInitOpt ';' bool_expr ';' . ForUpdateOpt ')' compound
+
+    ID  shift, and go to state 214
+
+    $default  reduce using rule 117 (ForUpdateOpt)
+
+    ForUpdateOpt  go to state 215
+
+
+State 212
+
+  106 conditional: IF '(' bool_expr ')' compound ELSE . simple
+  107            | IF '(' bool_expr ')' compound ELSE . compound
+
+    ID       shift, and go to state 111
+    MM       shift, and go to state 113
+    INT_L    shift, and go to state 66
+    FLOAT_L  shift, and go to state 67
+    PP       shift, and go to state 114
+    PRINT    shift, and go to state 115
+    '{'      shift, and go to state 89
+    '('      shift, and go to state 118
+    ';'      shift, and go to state 203
+    '+'      shift, and go to state 120
+    '-'      shift, and go to state 121
+
+    compound    go to state 216
+    const_expr  go to state 123
+    simple      go to state 217
+    name        go to state 126
+    expr        go to state 127
+    term        go to state 128
+    factor      go to state 129
+    PrefixOp    go to state 130
+    call        go to state 146
+
+
+State 213
+
+  105 conditional: IF '(' bool_expr ')' simple ELSE . simple
+  108            | IF '(' bool_expr ')' simple ELSE . compound
+
+    ID       shift, and go to state 111
+    MM       shift, and go to state 113
+    INT_L    shift, and go to state 66
+    FLOAT_L  shift, and go to state 67
+    PP       shift, and go to state 114
+    PRINT    shift, and go to state 115
+    '{'      shift, and go to state 89
+    '('      shift, and go to state 118
+    ';'      shift, and go to state 203
+    '+'      shift, and go to state 120
+    '-'      shift, and go to state 121
+
+    compound    go to state 218
+    const_expr  go to state 123
+    simple      go to state 219
+    name        go to state 126
+    expr        go to state 127
+    term        go to state 128
+    factor      go to state 129
+    PrefixOp    go to state 130
+    call        go to state 146
+
+
+State 214
+
+  118 ForUpdateOpt: ID . PP
+  119             | ID . MM
+
+    MM  shift, and go to state 220
+    PP  shift, and go to state 221
+
+
+State 215
+
+  112 loop: FOR '(' ForInitOpt ';' bool_expr ';' ForUpdateOpt . ')' simple
+  113     | FOR '(' ForInitOpt ';' bool_expr ';' ForUpdateOpt . ')' compound
+
+    ')'  shift, and go to state 222
+
+
+State 216
+
+  107 conditional: IF '(' bool_expr ')' compound ELSE compound .
+
+    $default  reduce using rule 107 (conditional)
+
+
+State 217
+
+  106 conditional: IF '(' bool_expr ')' compound ELSE simple .
+
+    $default  reduce using rule 106 (conditional)
+
+
+State 218
+
+  108 conditional: IF '(' bool_expr ')' simple ELSE compound .
+
+    $default  reduce using rule 108 (conditional)
+
+
+State 219
+
+  105 conditional: IF '(' bool_expr ')' simple ELSE simple .
+
+    $default  reduce using rule 105 (conditional)
+
+
+State 220
+
+  119 ForUpdateOpt: ID MM .
+
+    $default  reduce using rule 119 (ForUpdateOpt)
+
+
+State 221
+
+  118 ForUpdateOpt: ID PP .
+
+    $default  reduce using rule 118 (ForUpdateOpt)
+
+
+State 222
+
+  112 loop: FOR '(' ForInitOpt ';' bool_expr ';' ForUpdateOpt ')' . simple
+  113     | FOR '(' ForInitOpt ';' bool_expr ';' ForUpdateOpt ')' . compound
+
+    ID       shift, and go to state 111
+    MM       shift, and go to state 113
+    INT_L    shift, and go to state 66
+    FLOAT_L  shift, and go to state 67
+    PP       shift, and go to state 114
+    PRINT    shift, and go to state 115
+    '{'      shift, and go to state 89
+    '('      shift, and go to state 118
+    ';'      shift, and go to state 203
+    '+'      shift, and go to state 120
+    '-'      shift, and go to state 121
+
+    compound    go to state 223
+    const_expr  go to state 123
+    simple      go to state 224
+    name        go to state 126
+    expr        go to state 127
+    term        go to state 128
+    factor      go to state 129
+    PrefixOp    go to state 130
+    call        go to state 146
+
+
+State 223
+
+  113 loop: FOR '(' ForInitOpt ';' bool_expr ';' ForUpdateOpt ')' compound .
+
+    $default  reduce using rule 113 (loop)
+
+
+State 224
+
+  112 loop: FOR '(' ForInitOpt ';' bool_expr ';' ForUpdateOpt ')' simple .
+
+    $default  reduce using rule 112 (loop)

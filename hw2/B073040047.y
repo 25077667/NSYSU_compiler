@@ -17,6 +17,7 @@ class :
 CLASS ID '{' { push(); } fields methods { pop();} '}'
 | CLASS ID '{' { push(); } fields { pop();} '}'
 | CLASS ID '{' { push(); } methods { pop();} '}'
+| CLASS ID '{' '}'
 ;
 
 fields: declarations;
@@ -30,22 +31,23 @@ compound:  '{' { push(); } { pop();} '}'
 |  '{' { push(); } declarations statement { pop();} '}'
 ;
 
-declarations: specifier type id_list ';'
-| specifier type id_list_init ';'
-| FINAL type id_list_init ';'
-| specifier arr_type arr_init ';'
+declarations: 
+  specifier  type      id_list      ';'
+| specifier  type      id_list_init ';'
+| FINAL      type      id_list_init ';'
+| specifier  arr_type  arr_init     ';'
 ;
 
 specifier: | STATIC;
 
 id_list: ID
-| ID ',' id_list
+| id_list ',' ID
 | id_list_init
-| id_list_init ',' id_list
+| id_list ',' id_list_init
 ;
 
 id_list_init: ID '=' const_expr
-| ID '=' const_expr ',' id_list_init
+| id_list_init ',' ID '=' const_expr 
 ;
 
 type: INT 
