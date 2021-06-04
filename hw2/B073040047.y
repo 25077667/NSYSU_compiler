@@ -11,41 +11,41 @@ void yyerror(const char *s);
 %%
 classes: | classes class;
 
-class: CLASS ID '{' { push(); } fields methods '}' { pop();}
-| CLASS ID '{' '}'
+class: CLASS generic_id '{'{push();} fields methods '}'{pop();}
+| CLASS generic_id '{' '}'
 ;
 
-fields: | fields declarations;
+fields: declaration_star;
 methods: 
-| methods type ID '(' id_list_star ')' compound
-| methods MAIN '(' id_list_star ')' compound;
+| methods type generic_id '(' id_list_star ')' compound
+| methods MAIN '(' id_list_star ')' compound
+| methods VOID MAIN '(' id_list_star ')' compound;
 
 id_list_star:|id_list;
 
-compound:  '{' '}'
-|  '{' { push(); } declarations '}' { pop();} 
-|  '{' { push(); } statement '}' { pop();} 
-|  '{' { push(); } declarations statement '}' { pop();} 
+compound: '{'{push();} declaration_star statement_star '}'{pop();} 
 ;
 
-declarations: 
-  specifier  type      id_list      ';'
-| specifier  type      id_list_init ';'
-| FINAL      type      id_list_init ';'
-| specifier  arr_type  arr_init     ';'
+declaration_star: 
+| declaration_star specifier  type      id_list      ';'
+| declaration_star specifier  type      id_list_init ';'
+| declaration_star FINAL      type      id_list_init ';'
+| declaration_star specifier  arr_type  arr_init     ';'
 ;
 
 specifier: | STATIC;
 
-id_list: ID
-| id_list ',' ID
+id_list: generic_id
+| id_list ',' generic_id
 | id_list_init
 | id_list ',' id_list_init
 ;
 
-id_list_init: ID '=' const_expr
-| id_list_init ',' ID '=' const_expr 
+id_list_init: generic_id '=' const_expr
+| id_list_init ',' generic_id '=' const_expr 
 ;
+
+generic_id:  ID | generic_id'[' INT ']' | generic_id'.'ID;
 
 type: INT 
 | FLOAT
@@ -56,10 +56,9 @@ type: INT
 
 const_expr: INT_L
 | FLOAT_L
-| INT_L Infixop INT_L
-| INT_L Infixop FLOAT_L
-| FLOAT_L Infixop INT_L
-| FLOAT_L Infixop FLOAT_L
+| STR
+| generic_id 
+| const_expr Infixop const_expr
 ;
 
 Infixop: '+' | '-' | '*' | '/' | '%' | '>' | '<' | '&' | '|' | LE | GE | EQ | NE | AND | OR ;
@@ -70,26 +69,25 @@ arr_type: INT'['']'
 | BOOLEAN'['']'
 ;
 
-arr_init: '=' NEW type'[' INT_L ']';
+arr_init: generic_id '=' NEW type'[' INT_L ']';
 
-statement: compound
-| simple ';'
-| conditional ';'
-| loop ';'
-| return ';'
-| call ';'
-| ';'
+statement_star:
+| statement_star compound
+| statement_star simple ';'
+| statement_star conditional
+| statement_star loop
+| statement_star return ';'
+| statement_star call ';'
+| statement_star ';'
 ;
 
-simple: name '=' expr ';' 
+simple: generic_id '=' expr ';' 
 | PRINT '(' expr ')' ';'
-| name PP ';'
-| name MM ';'
+| generic_id PP ';'
+| generic_id MM ';'
 | expr ';'
 | ';'
 ;
-
-name: ID | name'.'ID;
 
 expr: term
 | expr '+' term
@@ -97,14 +95,13 @@ expr: term
 ;
 
 term: factor
-| factor '*' factor
-| factor '/' factor;
+| term '*' factor
+| term '/' factor;
 
-factor: ID
-| const_expr
+factor: const_expr
 | '(' expr ')'
-| PrefixOp ID
-| ID PostfixOp
+| PrefixOp generic_id
+| generic_id PostfixOp
 | call 
 ;
 
@@ -117,7 +114,7 @@ conditional: IF '(' bool_expr ')' simple ELSE simple
 | IF '(' bool_expr ')' simple ELSE compound
 ;
 
-bool_expr: expr Infixop expr;
+bool_expr: expr;
 
 loop: WHILE '(' bool_expr ')' simple
 | WHILE '(' bool_expr ')' compound
@@ -131,12 +128,12 @@ ForInitOpt:
 ;
 
 ForUpdateOpt: 
-| ID PP | ID MM
+| generic_id PP | generic_id MM
 ;
 
 return: RETURN expr ';' ;
 
-call: name '(' expr_list ')' ';'
+call: generic_id '(' expr_list ')' ';'
 ;
 
 expr_list: expr
