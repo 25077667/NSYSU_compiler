@@ -11,21 +11,21 @@ void yyerror(const char *s);
 %%
 classes: | classes class;
 
-class: CLASS ID '{' { push(); } fields methods { pop();} '}'
+class: CLASS ID '{' { push(); } fields methods '}' { pop();}
 | CLASS ID '{' '}'
 ;
 
 fields: | fields declarations;
 methods: 
 | methods type ID '(' id_list_star ')' compound
-| methods type MAIN '(' id_list_star ')' compound;
+| methods MAIN '(' id_list_star ')' compound;
 
 id_list_star:|id_list;
 
 compound:  '{' '}'
-|  '{' { push(); } declarations { pop();} '}'
-|  '{' { push(); } statement { pop();} '}'
-|  '{' { push(); } declarations statement { pop();} '}'
+|  '{' { push(); } declarations '}' { pop();} 
+|  '{' { push(); } statement '}' { pop();} 
+|  '{' { push(); } declarations statement '}' { pop();} 
 ;
 
 declarations: 
@@ -62,8 +62,7 @@ const_expr: INT_L
 | FLOAT_L Infixop FLOAT_L
 ;
 
-Infixop: '+' | '-' | '*' | '/' | '%' | '>' | '<' | '&' | '|'
-| '<''=' | '>''=' | '=''=' | '!''=' | '&''&' | '|''|' ;
+Infixop: '+' | '-' | '*' | '/' | '%' | '>' | '<' | '&' | '|' | LE | GE | EQ | NE | AND | OR ;
 
 arr_type: INT'['']'
 | FLOAT'['']'
