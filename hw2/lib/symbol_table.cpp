@@ -12,7 +12,7 @@ namespace
 
 int insert(const char *_token)
 {
-    auto res = -(stack.back().find(_token) == stack.back().end());
+    auto res = (stack.back().find(_token) == stack.back().end()) - 1;
     if (!res)
         stack.back().insert(_token);
     return res;

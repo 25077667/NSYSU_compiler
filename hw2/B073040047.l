@@ -4,6 +4,7 @@
 
 unsigned long long cpos = 1, tokc = 0, lc = 1;
 char full_line[80];
+char tok[80];
 %}
 
 ID           [A-Za-z_\$][_[:alnum:]\$]*
@@ -188,6 +189,7 @@ Single_char [\{\}\[\]\(\)\!\=\%\/\*\-\+\<\>\;\:\,]
 
 {ID} {
     cpos += yyleng;
+    strcpy(tok, yytext);
     strcat(full_line, yytext);
     return ID;
 }
