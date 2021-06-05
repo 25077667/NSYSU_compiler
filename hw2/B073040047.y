@@ -1,4 +1,5 @@
 %define parse.error verbose
+%define parse.trace
 %{
 #include <stdio.h>
 #include "lib/symbol_table.h"
@@ -27,6 +28,8 @@ compound: '{'{push();} declaration_star statement_star '}'{pop();}
 declaration_star: 
 | declaration_star specifier  type      id_list      ';'
 | declaration_star specifier  type      id_list_init ';'
+| declaration_star specifier  ID        new_obj      ';' // For the class had not decl.
+| declaration_star FINAL      ID        new_obj      ';' // For the class had not decl.
 | declaration_star FINAL      type      id_list_init ';'
 | declaration_star specifier  arr_type  arr_init     ';'
 ;
@@ -42,6 +45,10 @@ id_list: generic_id
 id_list_init: generic_id '=' const_expr
 | id_list_init ',' generic_id '=' const_expr 
 ;
+
+new_obj: ID '=' NEW ID '(' tuple ')';
+
+tuple: | tuple INT_L | tuple FLOAT_L | tuple STR;
 
 generic_id:  ID | generic_id'[' INT_L ']' | generic_id'.'ID;
 
