@@ -27,22 +27,26 @@ class: CLASS ID '{'{push();} declare '}'{pop();};
 declare:
     | declare final_decl__ ';'
     | declare spec_decl__
-    | declare MAIN '(' id_list_star ')' compound    // non-type main
+    | declare MAIN '(' args ')' compound    // non-type main
+    | declare VOID MAIN '(' args ')' compound    // non-type main
+    | declare class
     | declare error ';'
     ;
 
 compound: '{'{push();} statement_star '}'{pop();} ;
 
 spec_decl__: spec_type_chk__ decl_impl ';' // var
-    | spec_type_chk__ '(' id_list_star ')' compound // func
+    | spec_type_chk__ '(' args ')' compound // func
     ;
 
-spec_type_chk__: spec_type__ {chk_dupid;} generic_id;
+spec_type_chk__: spec_type__ generic_id {chk_dupid;} ;
 
 decl_impl: 
+    | '=' init_decl
     | ',' id_list
-    | '=' NEW type arr_or_obj 
     ;
+
+init_decl: const_expr | NEW type arr_or_obj ;
 
 arr_or_obj: '[' INT_L ']' | '(' tuple ')';
 
@@ -50,17 +54,20 @@ final_decl__: final_decl_chk__ const_expr // For the class had not decl.
     | final_decl_chk__ NEW type arr_or_obj
     ;
 
-final_decl_chk__: FINAL type {chk_dupid;} generic_id '=';
+final_decl_chk__: FINAL type generic_id {chk_dupid;} '=';
 
 spec_type__: STATIC type | type;
 
-id_list_star:|id_list;
+args:
+    | type generic_id {chk_dupid;}
+    | args ',' type generic_id {chk_dupid;} ;
 
-id_list: init_or_not__
-    | id_list ',' init_or_not__
+id_list: init_or_not__ {chk_dupid;} 
+    | id_list ',' init_or_not__ {chk_dupid;} 
     ;
 
-init_or_not__: generic_id | id_list_init;
+init_or_not__: generic_id 
+    | id_list_init;
 
 id_list_init: generic_id '=' const_expr
     | id_list_init ',' generic_id '=' const_expr 
@@ -90,26 +97,31 @@ Infixop: '+' | '-' | '*' | '/' | '%' | '>' | '<' | '&' | '|' | LE | GE | EQ | NE
 
 statement_star:
     | statement_star compound
-    | statement_star simple
+    | statement_star simple_call_decl ';'
     | statement_star conditional
     | statement_star loop
     | statement_star return
-    | statement_star call
     | statement_star declare
     | statement_star ';'
     ;
 
-simple: generic_id '=' expr ';' 
-    | PRINT '(' expr ')' ';'
-    | generic_id PP ';'
-    | generic_id MM ';'
-    | expr ';'
-    | ';'
+simple_call_decl: generic_id '(' para_list ')'   //call
+    | generic_id '=' simple_call_decl                      //simple
+    | generic_id PP                            //simple
+    | generic_id MM                            //simple
+    | PP generic_id                            //simple
+    | MM generic_id                            //simple
+    | '+' generic_id                           //simple
+    | '-' generic_id                           //simple
+    | expr                                     //simple
+    | PRINT '(' expr ')'                       //simple
+    | generic_id generic_id decl_impl
     ;
 
 expr: term
     | expr '+' term
     | expr '-' term
+    | error
     ;
 
 term: factor
@@ -119,35 +131,29 @@ term: factor
 
 factor: const_expr
     | '(' expr ')'
-    | PrefixOp generic_id
-    | generic_id PostfixOp
-    | call
     ;
 
-PrefixOp: PP | MM | '+' | '-';
-PostfixOp: PP | MM ;
-
-conditional: if_simple__ simple
-    | if_simple__ compound
-    | if_compound__ simple
-    | if_compound__ compound
+conditional: if_simple__
+    | if_simple__ else_simple__
+    | if_simple__ else_compound__
+    | if_compound__
+    | if_compound__ else_simple__
+    | if_compound__ else_compound__
     ;
 
 if_expr__: IF '(' bool_expr ')';
 
-if_simple__: if_expr__ simple 
-    | if_simple__ ELSE
-    ;
+if_simple__  : if_expr__ simple_call_decl;
+if_compound__: if_expr__ compound;
 
-if_compound__: if_expr__ compound
-    | if_compound__ ELSE
-    ;
+else_simple__: ELSE simple_call_decl;
+else_compound__: ELSE compound;
 
 bool_expr: expr;
 
-loop: while_expr__     simple
+loop: while_expr__     simple_call_decl
     | while_expr__     compound
-    | for_expr__       simple
+    | for_expr__       simple_call_decl
     | for_expr__       compound
     ;
 
@@ -156,7 +162,7 @@ for_expr__  : FOR '(' ForInitOpt ';' bool_expr ';' ForUpdateOpt ')';
 
 ForInitOpt:
     | id_list_init
-    | INT id_list_init
+    | INT id_list_init {chk_dupid;}
     ;
 
 ForUpdateOpt: 
@@ -165,14 +171,13 @@ ForUpdateOpt:
 
 return: RETURN expr ';' ;
 
-call: generic_id '(' expr_list ')' ';';
-
-expr_list: expr
-    | expr ',' expr_list
+para_list: expr
+    | para_list ',' expr 
     ;
 
 %%
 int main() {
+    set_dbg(0);
     yyparse();
     return 0;
 }

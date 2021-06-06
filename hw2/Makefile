@@ -16,14 +16,11 @@ lex: ${LEX_RULE}
 	${CC} -c lex.c
 
 yacc: ${YACC_RULE}
-	${YACC} -g -vd ${YACC_RULE}
+	${YACC} -g -vd -Wnone ${YACC_RULE}
 	${CC} -c B073040047.tab.c
 
 dot: yacc
 	dot -T jpg B073040047.dot -o B073040047.jpg
 
 test: all
-	for i in $$(seq 1 6); do
-		./my_yacc.elf < Testfile/Test$$i.java;
-		echo;
-	done
+	for i in $$(seq 1 6); do ./my_yacc.elf < Testfile/test$$i.java; echo; done

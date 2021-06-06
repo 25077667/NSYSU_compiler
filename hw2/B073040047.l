@@ -3,7 +3,7 @@
 #include "B073040047.tab.h"
 
 unsigned long long cpos = 1, tokc = 0, lc = 1;
-char full_line[80];
+char full_line[1024];
 char tok[80];
 %}
 
@@ -27,6 +27,7 @@ Single_char [\{\}\[\]\(\)\!\=\%\/\*\-\+\<\>\;\:\,]
 {Newline} {
     cpos = 1;
     printf("%lld: %s\n", lc, full_line);
+    fflush(stdout);
     full_line[0] = 0;
     lc++;
 }
@@ -167,6 +168,7 @@ Single_char [\{\}\[\]\(\)\!\=\%\/\*\-\+\<\>\;\:\,]
         if(yytext[i] == '\n' && (cpos = 1) && i != yyleng-1)
             printf("%lld: ", ++lc);
     }
+    fflush(stdout);
 }
 
 {Integer} {
@@ -189,6 +191,8 @@ Single_char [\{\}\[\]\(\)\!\=\%\/\*\-\+\<\>\;\:\,]
 
 {ID} {
     cpos += yyleng;
+    for(int i = 0; i < 80; i++)
+        tok[i] = 0;
     strcpy(tok, yytext);
     strcat(full_line, yytext);
     return ID;

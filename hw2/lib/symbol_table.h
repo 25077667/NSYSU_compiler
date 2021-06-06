@@ -10,6 +10,7 @@ extern "C"
 
     void push();
     void pop();
+    void set_dbg(int value); // true, false
 #ifdef __cplusplus
 }
 #endif
