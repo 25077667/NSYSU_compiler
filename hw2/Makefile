@@ -16,7 +16,7 @@ lex: ${LEX_RULE}
 	${CC} -c -g lex.c
 
 yacc: ${YACC_RULE}
-	${YACC} -g -v -d ${YACC_RULE}
+	${YACC} -g -vd ${YACC_RULE}
 	${CC} -c -g B073040047.tab.c
 
 dot: yacc

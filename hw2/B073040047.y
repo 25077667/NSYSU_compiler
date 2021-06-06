@@ -1,9 +1,13 @@
 %define parse.error verbose
 %define parse.trace
+%start  classes
+%nonassoc ELSE
 %{
 #include <stdio.h>
+#include <unistd.h>
 #include "lib/symbol_table.h"
 int yylex();
+// int yydebug = 1;
 void yyerror(const char *s);
 extern char tok[80];
 #define DUP_ID "duplicate id.\n"
@@ -13,48 +17,41 @@ extern char tok[80];
 #define chk_dupid do{int res = insert(tok); if (res < 0) show_errmsg(DUP_ID);} while(0)
 %}
 
-%token AND BOOLEAN CHAR CLASS ELSE EQ FINAL FLOAT FOR GE ID IF INT LE MAIN MM NE NEW INT_L FLOAT_L OR PP PRINT RETURN STATIC STR VOID WHILE
+%token AND BOOLEAN CHAR CLASS EQ FINAL FLOAT FOR GE ID IF INT LE MAIN MM NE NEW INT_L FLOAT_L OR PP PRINT RETURN STATIC STR VOID WHILE
 
 %%
 classes: | classes class;
 
-class: CLASS ID '{'{push();} fields methods '}'{pop();};
+class: CLASS ID '{'{push();} declare '}'{pop();};
 
-// corss_f_m: fields | methods | corss_f_m fields | corss_f_m methods;
-
-fields: declaration_star;
-methods: 
-    | methods type ID '(' id_list_star ')' compound
-    | methods MAIN '(' id_list_star ')' compound
-    | methods VOID MAIN '(' id_list_star ')' compound
+declare:
+    | declare final_decl__ ';'
+    | declare spec_decl__  ';'
+    | declare MAIN '(' id_list_star ')' compound    // non-type main
     ;
+
+compound: '{'{push();} declare statement_star '}'{pop();} ;
+
+spec_decl__: spec_type__ {chk_dupid;} decl_impl;
+
+decl_impl: generic_id ',' id_list_star
+    | generic_id '(' id_list_star ')' compound
+    | generic_id arr_or_obj_decl 
+    ;
+
+arr_or_obj_decl: '=' NEW type arr_or_obj; 
+
+arr_or_obj: '[' INT_L ']' | '(' tuple ')';
+
+final_decl__: final_decl_chk__ const_expr // For the class had not decl.
+    | final_decl_chk__ NEW type arr_or_obj
+    ;
+
+final_decl_chk__: FINAL type {chk_dupid;} generic_id '=';
+
+spec_type__: STATIC type | type;
 
 id_list_star:|id_list;
-
-compound: '{'{push();} declaration_star statement_star '}'{pop();} ;
-
-declaration_star:
-    | declaration_star spec_decl__  ';'
-    | declaration_star final_decl__ ';'
-    ;
-
-spec_decl__: spec_decl_chk__ id_list
-    | spec_decl_chk__ arr_init
-    | spec_decl_chk__ new_obj // For the class had not decl.
-    ;
-
-spec_decl_chk__: spec_type__ {chk_dupid;};
-
-final_decl__: final_decl_chk__ id_list_init // For the class had not decl.
-    | final_decl_chk__ new_obj
-    ;
-
-final_decl_chk__: final_type__ {chk_dupid;} ;
-
-spec_type__: specifier type;
-final_type__: FINAL type;
-
-specifier: | STATIC;
 
 id_list: init_or_not__
     | id_list ',' init_or_not__
@@ -65,8 +62,6 @@ init_or_not__: generic_id | id_list_init;
 id_list_init: generic_id '=' const_expr
     | id_list_init ',' generic_id '=' const_expr 
     ;
-
-new_obj: ID '=' NEW ID '(' tuple ')';
 
 tuple: | tuple INT_L | tuple FLOAT_L | tuple STR;
 
@@ -90,15 +85,13 @@ const_expr: INT_L
 
 Infixop: '+' | '-' | '*' | '/' | '%' | '>' | '<' | '&' | '|' | LE | GE | EQ | NE | AND | OR ;
 
-arr_init: generic_id '=' NEW type'[' INT_L ']';
-
 statement_star:
     | statement_star compound
-    | statement_star simple ';'
+    | statement_star simple
     | statement_star conditional
     | statement_star loop
-    | statement_star return ';'
-    | statement_star call ';'
+    | statement_star return
+    | statement_star call
     | statement_star ';'
     ;
 

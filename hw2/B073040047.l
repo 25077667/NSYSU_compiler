@@ -159,7 +159,7 @@ Single_char [\{\}\[\]\(\)\!\=\%\/\*\-\+\<\>\;\:\,]
     // Print the comment
 
     // Clean the buffer
-    printf("%lld: %s\n", lc, full_line);
+    printf("%lld: %s", lc, full_line);
     full_line[0] = 0;
 
     for(int i = 0; i < yyleng; i++){

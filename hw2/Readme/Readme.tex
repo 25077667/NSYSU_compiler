@@ -80,7 +80,13 @@ Instructor: Ye-In Chang
     \section{Problems}
     \begin{enumerate}
         \item Yacc 有毒。
-        \item It only can be written in LALR($1$). It makes me very very confused to debug.
+        \item It only can be written in GLR. It makes me very very confused to debug.
+        \item 仔細讀了一些 flex \& bison $($O'REILLY$)$ 的書之後，覺得作業規格書真是誤導人,甚至,sample output 也是錯的 $\cdot$
+              比如說：\begin{enumerate}
+                  \item class 內部可以有 fields 跟 methods，但是呢，規格書說變數宣告屬於 fields，函式屬於 methods。如果按照如此實做，會遇到 Reduce/Reduce conflict。\\
+                        但是如果參考書中介紹，變數宣告與 methods 中的 function 合併成一個 non-terminal，就可以避免這個問題。
+                  \item
+              \end{enumerate}
     \end{enumerate}
 
     \section{Outcome}
