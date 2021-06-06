@@ -30,7 +30,7 @@ declare:
     | declare MAIN '(' id_list_star ')' compound    // non-type main
     ;
 
-compound: '{'{push();} declare statement_star '}'{pop();} ;
+compound: '{'{push();} statement_star '}'{pop();} ;
 
 spec_decl__: spec_type__ {chk_dupid;} decl_impl;
 
@@ -92,6 +92,7 @@ statement_star:
     | statement_star loop
     | statement_star return
     | statement_star call
+    | statement_star declare
     | statement_star ';'
     ;
 

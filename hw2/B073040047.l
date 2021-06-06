@@ -164,7 +164,7 @@ Single_char [\{\}\[\]\(\)\!\=\%\/\*\-\+\<\>\;\:\,]
 
     for(int i = 0; i < yyleng; i++){
         putchar(yytext[i]);
-        if(yytext[i] == '\n' && (cpos = 1))
+        if(yytext[i] == '\n' && (cpos = 1) && i != yyleng-1)
             printf("%lld: ", ++lc);
     }
 }
