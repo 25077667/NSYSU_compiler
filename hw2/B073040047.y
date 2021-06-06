@@ -26,20 +26,23 @@ class: CLASS ID '{'{push();} declare '}'{pop();};
 
 declare:
     | declare final_decl__ ';'
-    | declare spec_decl__  ';'
+    | declare spec_decl__
     | declare MAIN '(' id_list_star ')' compound    // non-type main
+    | declare error ';'
     ;
 
 compound: '{'{push();} statement_star '}'{pop();} ;
 
-spec_decl__: spec_type__ {chk_dupid;} decl_impl;
-
-decl_impl: generic_id ',' id_list_star
-    | generic_id '(' id_list_star ')' compound
-    | generic_id arr_or_obj_decl 
+spec_decl__: spec_type_chk__ decl_impl ';' // var
+    | spec_type_chk__ '(' id_list_star ')' compound // func
     ;
 
-arr_or_obj_decl: '=' NEW type arr_or_obj; 
+spec_type_chk__: spec_type__ {chk_dupid;} generic_id;
+
+decl_impl: 
+    | ',' id_list
+    | '=' NEW type arr_or_obj 
+    ;
 
 arr_or_obj: '[' INT_L ']' | '(' tuple ')';
 
